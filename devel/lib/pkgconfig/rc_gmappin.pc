@@ -1,8 +1,0 @@
-prefix=/home/miguel/Desktop/Robotica_Cognitiva/Code/projeto/devel
-
-Name: rc_gmappin
-Description: Description of rc_gmappin
-Version: 1.1.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: gmapping move_base explore_lite rviz turtlebot3_simulations rc_simul_worlds
