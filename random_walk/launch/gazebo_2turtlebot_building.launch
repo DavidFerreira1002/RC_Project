@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<launch>
+  <master auto="start"/>
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="ns1" default="turtle1"/>
+  <arg name="ns2" default="turtle2"/>
+  
+<!--  <param name="/use_sim_time" value="true" />-->
+
+  <include file="$(find rc_simul_worlds)/launch/2turtlebot3_gazebo_building.launch">
+    <arg name="ns1" value="$(arg ns1)"/>
+    <arg name="ns2" value="$(arg ns2)"/>
+  </include>
+
+  <node name="map_server" pkg="map_server" type="map_server"
+	  args="$(find rc_simul_worlds)/maps/building/building.png 0.025" respawn="false"/>
+	  
+  <node pkg="rviz" type="rviz" name="rviz"
+  	args="-d $(find random_walk)/rviz_configs/gazebo_2turtlebot_building.rviz"
+  />
+	  
+  <group ns="$(arg ns1)">
+    <include file="$(find random_walk)/launch/random_walk.launch" >
+      <arg name="ns" value="$(arg ns1)/" />
+      <arg name="max_linear_speed" value="0.5" />
+      <arg name="max_angular_speed" value="2.0" />
+      <arg name="safe_dist_th" value="1.0" />
+      <arg name="detour_obst_th" value="0.75" />
+      <arg name="stop_dist_th" value="0.5" />
+      <arg name="diff_th" value="0.1" />
+    </include> 
+  </group>
+
+  <group ns="$(arg ns2)">
+    <include file="$(find random_walk)/launch/random_walk.launch" >
+      <arg name="ns" value="$(arg ns2)/" />
+      <arg name="max_linear_speed" value="0.5" />
+      <arg name="max_angular_speed" value="2.0" />
+      <arg name="safe_dist_th" value="1.0" />
+      <arg name="detour_obst_th" value="0.75" />
+      <arg name="stop_dist_th" value="0.5" />
+      <arg name="diff_th" value="0.1" />
+    </include>   
+  </group>
+
+</launch>
