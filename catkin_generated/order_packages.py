@@ -1,5 +1,0 @@
-# generated from catkin/cmake/template/order_packages.context.py.in
-source_root_dir = '/home/miguel/Desktop/Robotica_Cognitiva/Code/projeto/src'
-whitelisted_packages = ''.split(';') if '' != '' else []
-blacklisted_packages = ''.split(';') if '' != '' else []
-underlay_workspaces = '/home/miguel/Desktop/Robotica_Cognitiva/Code/projeto/devel;/home/miguel/Desktop/Robotica_Cognitiva/Code/lab9_ws/devel;/home/miguel/Desktop/Robotica_Cognitiva/Code/lab7_ws/devel;/home/miguel/Desktop/Robotica_Cognitiva/Code/lab4_ws/devel;/home/miguel/Desktop/Robotica_Cognitiva/Code/lab3_ws/devel;/home/miguel/Desktop/Robotica_Cognitiva/Code/workspace/devel;/opt/ros/noetic'.split(';') if '/home/miguel/Desktop/Robotica_Cognitiva/Code/projeto/devel;/home/miguel/Desktop/Robotica_Cognitiva/Code/lab9_ws/devel;/home/miguel/Desktop/Robotica_Cognitiva/Code/lab7_ws/devel;/home/miguel/Desktop/Robotica_Cognitiva/Code/lab4_ws/devel;/home/miguel/Desktop/Robotica_Cognitiva/Code/lab3_ws/devel;/home/miguel/Desktop/Robotica_Cognitiva/Code/workspace/devel;/opt/ros/noetic' != '' else []
