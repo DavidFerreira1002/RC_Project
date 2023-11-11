@@ -1,0 +1,8 @@
+prefix=/home/miguel/Desktop/Robotica_Cognitiva/Code/projeto/devel
+
+Name: random_walk
+Description: Description of random_walk
+Version: 2.1.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: roscpp std_msgs rc_simul_worlds fake_localization p3dx_description teleop_twist_keyboard
