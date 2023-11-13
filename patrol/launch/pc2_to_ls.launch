@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+    
+        <remap from="/cloud_in" to="/camera/depth/points"/> <!-- é o input do nodo, passa a ser a nossa cloudpoint -->
+        <remap from="/scan" to="/camera/scan"/> <!-- o output é para aquele tópico -->
+
+        <!--
+        <param name="angle_increment" value=""/>
+        <param name="scan_time" value=""/>
+        <param name="concurrency_level" value=""/> -->
+        
+        <param name="angle_min" value="-0.5236"/> <!-- FOV de 60º -->
+        <param name="angle_max" value="0.5236"/> 
+
+        <param name="range_min" value="0.12"/> <!-- igualei ao lidar só para comparação -->
+        <param name="range_max" value="3.5"/>
+
+        <param name="target_frame" value="camera_link"/> <!-- nuvem em relação ao referencial da câmara -->
+        
+        <param name="min_height" value="0.0"/> <!-- considera obstáculos desde os 0m até aos 1m (de altura) em relação à câmara, penso -->
+        <param name="max_height" value="1.0"/>
+
+        <param name="use_inf" value="true"/>
+    </node>
+
+</launch>

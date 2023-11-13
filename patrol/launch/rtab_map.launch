@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- <include file="$(find realsense_camera)/launch/r200_nodelet_rgbd.launch"/> -->
+
+    <node type="pointcloud_to_depthimage" name="pointcloud_to_depthimage" pkg="rtabmap_util">
+        <remap from="camera_info" to="camera/rgb/camera_info"/>
+        <remap from="cloud" to="camera/depth/points"/>
+        
+        <remap from="image" to="camera/rgb/processed/image"/>
+        <remap from="image_raw" to="camera/rgb/processed/image_raw"/>
+        <param name="approx" value="false"/>
+        <param name="fill_holes_size" value="2"/>
+
+    </node>
+
+    <include file="$(find rtabmap_launch)/launch/rtabmap.launch">
+        <arg name="rtabmap_args" value="--delete_db_on_start"/>
+        <arg name="depth_topic" value="/camera/rgb/processed/image_raw"/>
+        <arg name="rgb_topic" value="/camera/rgb/image_raw"/>
+        <arg name="frame_id"  value="camera_link"/> <!-- hmmm  porque é que este referencial está fora do robô? -->
+
+    </include>
+
+</launch>
