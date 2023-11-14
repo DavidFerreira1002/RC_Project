@@ -1,9 +1,4 @@
-# Ignore everything
-*
-# Except the .gitignore
-!.gitignore
-# Except the src folder
-!src/
-
-# Ignore CMakeLists.txt inside the src folder
+build/
+devel/
+.catkin_workspace
 src/CMakeLists.txt

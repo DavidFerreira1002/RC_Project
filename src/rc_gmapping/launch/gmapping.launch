@@ -7,7 +7,7 @@
       <!-- <remap from="scan" to="/camera/scan"/> usa o laserscan que aldrabámos -->
       <param name="throttle_scans" value="10"/><!--1-->
       <param name="map_update_interval" value="2.5"/> <!--5.0 1.0 -->
-      <param name="maxUrange" value="3.5"/> <!--16-->
+      <param name="maxUrange" value="5"/> <!--16-->
       <param name="sigma" value="0.05"/>
       <param name="kernelSize" value="1"/>
       <param name="lstep" value="0.05"/>
