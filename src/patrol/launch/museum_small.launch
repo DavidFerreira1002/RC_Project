@@ -11,7 +11,7 @@
   <env name="GAZEBO_MODEL_PATH" value="$(find patrol)/model:$(optenv GAZEBO_MODEL_PATH)" />
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find patrol)/world/office.world"/>
+    <arg name="world_name" value="$(find patrol)/world/museum.world"/>
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>
@@ -28,10 +28,10 @@
     <param name="tf_prefix" value=""/>
   </node>
 
-  <!-- <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher">
+  <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher">
     <param name="use_gui" value="true"/>
     <param name="rate" value="50"/>
-  </node> -->
+  </node>
 
 
 </launch>

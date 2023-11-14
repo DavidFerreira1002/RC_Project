@@ -18,7 +18,7 @@
         <arg name="rtabmap_args" value="--delete_db_on_start"/>
         <arg name="depth_topic" value="/camera/rgb/processed/image_raw"/>
         <arg name="rgb_topic" value="/camera/rgb/image_raw"/>
-        <arg name="frame_id"  value="camera_link"/> <!-- hmmm  porque é que este referencial está fora do robô? -->
+        <arg name="frame_id"  value="odom"/>
 
     </include>
 
