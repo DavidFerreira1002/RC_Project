@@ -1,0 +1,8 @@
+prefix=/home/david/Projects/RC_Project/devel
+
+Name: rc_gmapping
+Description: Description of rc_gmapping
+Version: 1.1.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: gmapping move_base explore_lite rviz turtlebot3_simulations rc_simul_worlds

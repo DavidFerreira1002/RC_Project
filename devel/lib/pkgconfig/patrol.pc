@@ -1,0 +1,8 @@
+prefix=/home/david/Projects/RC_Project/devel
+
+Name: patrol
+Description: Description of patrol
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
