@@ -1,0 +1,8 @@
+# Ignore everything
+*
+
+# Except the src folder
+!src/
+
+# Ignore CMakeLists.txt inside the src folder
+src/CMakeLists.txt
