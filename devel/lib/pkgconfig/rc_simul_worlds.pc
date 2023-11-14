@@ -1,8 +1,0 @@
-prefix=/home/david/Projects/RC_Project/devel
-
-Name: rc_simul_worlds
-Description: Description of rc_simul_worlds
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: roscpp rospy std_msgs

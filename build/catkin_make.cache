@@ -1,2 +1,0 @@
-patrol:random_walk:rc_gmapping:rc_simul_worlds:turtlebot3_simulations/turtlebot3_fake:turtlebot3_simulations/turtlebot3_gazebo:turtlebot3_simulations/turtlebot3_simulations
--DCATKIN_DEVEL_PREFIX=/home/david/Projects/RC_Project/devel -DCMAKE_INSTALL_PREFIX=/home/david/Projects/RC_Project/install -G Unix Makefiles
