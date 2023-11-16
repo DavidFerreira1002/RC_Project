@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <master auto="start"/>
+  <arg name="model" default="$(find p3dx_description)/urdf/pioneer3dx.xml"/>
+  <param name="robot_description" textfile="$(arg model)" />
+
+  <include file="$(find rc_simul_worlds)/launch/pioneer_stage.launch">
+    <arg name="world" value="tiny" doc="worlds: building | isr_floor0 | tiny"/>
+  </include>
+  
+<!--- Run the map server -->
+  <node name="map_server" pkg="map_server" type="map_server"
+	  args="$(find rc_simul_worlds)/maps/tiny/tiny.png 0.2" respawn="false"/>
+
+ <node type="rviz" name="rviz" pkg="rviz" args="-d $(find rc_amcl)/rviz/nav_stage.rviz" />
+
+ <include file="$(find rc_amcl)/launch/amcl_rndw_pioneer.launch">
+   <arg name="x0" value="1.0" />
+   <arg name="y0" value="1.0" />
+   <arg name="a0" value="0.0" />
+ </include>
+
+</launch>

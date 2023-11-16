@@ -31,22 +31,9 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(explorer_node src/explorer_node.cpp)
-add_executable(guide_node src/guide_node.cpp)
-
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-add_dependencies(explorer_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(guide_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(explorer_node
-  ${catkin_LIBRARIES}
-  ${OpenCV_LIBS}
-)
-
-target_link_libraries(guide_node
-  ${catkin_LIBRARIES}
-  ${OpenCV_LIBS}
-)
 
