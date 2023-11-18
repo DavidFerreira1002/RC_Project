@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<launch>
+  <master auto="start"/>
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="ns1" default="turtle1"/>
+  <arg name="ns2" default="turtle2"/>
+  
+<!--  <param name="/use_sim_time" value="true" />-->
+
+  <include file="$(find rc_simul_worlds)/launch/2turtlebot3_gazebo_building.launch">
+    <arg name="ns1" value="$(arg ns1)"/>
+    <arg name="ns2" value="$(arg ns2)"/>
+  </include>
+
+  <node name="map_server" pkg="map_server" type="map_server"
+	  args="$(find rc_simul_worlds)/maps/building/building.png 0.025" respawn="false"/>
+	  
+  <node pkg="rviz" type="rviz" name="rviz"
+  	args="-d $(find rc_amcl)/rviz/gazebo_2turtlebot_building.rviz"
+  />
+	  
+  <group ns="$(arg ns1)">
+	<include file="$(find rc_amcl)/launch/amcl_rndw_turtlebot3.launch">
+		<arg name="x0" value="4.2" />
+		<arg name="y0" value="9.0" /> <!-- 7.9 -->
+		<arg name="a0" value="0.0" />
+		<arg name="prefix" value="$(arg ns1)" />
+	</include>
+  </group>
+
+  <group ns="$(arg ns2)">
+	<include file="$(find rc_amcl)/launch/amcl_rndw_turtlebot3.launch">
+  		<arg name="x0" value="22.0" />
+  		<arg name="y0" value="5.25" />
+  		<arg name="a0" value="2.36" />
+		<arg name="prefix" value="$(arg ns2)" />
+	</include> 
+  </group>
+
+</launch>
