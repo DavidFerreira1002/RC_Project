@@ -54,7 +54,7 @@ class MapGenerator
     {
       ros::NodeHandle n;
       ROS_INFO("Waiting for the map");
-      map_sub_ = n.subscribe("map", 1, &MapGenerator::mapCallback, this);
+      //map_sub_ = n.subscribe("map", 1, &MapGenerator::mapCallback, this);
     }
 
     void mapCallback(const nav_msgs::OccupancyGridConstPtr& map)
@@ -137,15 +137,23 @@ free_thresh: 0.196
 
 
 bool bss_state = true;
+nav_msgs::OccupancyGridConstPtr finalMap;
+
 
 void bssCallback(const std_msgs::Bool& bss){
-  ROS_INFO(" ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE");
 	bss_state = bss.data;
   if (!bss_state) {
     ROS_INFO("Tasked to save the map");
   }
 }
 
+void lmapCallback(const nav_msgs::OccupancyGridConstPtr& map){
+  //do this while the exploration mode is true
+  if(bss_state){
+    finalMap = map;
+    ROS_INFO("Latest map has been stored");
+  }
+}
 
 
 #define USAGE "Usage: \n" \
@@ -156,14 +164,14 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "map_saver");
 	ros::NodeHandle nh;
-
   ros::Subscriber bss_sub = nh.subscribe("/explore/exploration_mode", 2, bssCallback);
+  //subscribe to "map" and save the latest map
+  ros::Subscriber lmap = nh.subscribe("/map",1,lmapCallback);
 
   std::string mapname = "map";
   int threshold_occupied = 65;
   int threshold_free = 25;
 
-  ROS_INFO("is this one the right one?");
 
   for(int i=1; i<argc; i++)
   {
@@ -230,19 +238,21 @@ int main(int argc, char **argv)
     ROS_ERROR("threshold_free must be smaller than threshold_occupied");
     return 1;
   }
-
-
+  
   bool saving = false;
-
+  
   ros::Rate rate(10);
 
   while(!map_is_saved && ros::ok()) {
     //entra sempre aqui e não é desligado
     if (!bss_state && !saving) {
-      ROS_INFO("da ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \n");
       saving = true;
+      //create the object
       MapGenerator mg(mapname, threshold_occupied, threshold_free);
-      map_is_saved = mg.saved_map_;
+      //save the finalMap, that was saved in lmapCallback
+      mg.mapCallback(finalMap);
+      //put map_is_saved to true to break the cycle
+      map_is_saved = mg.saved_map_; 
     }
 
     rate.sleep();
