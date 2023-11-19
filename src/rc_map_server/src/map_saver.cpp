@@ -55,6 +55,7 @@ class MapGenerator
       ros::NodeHandle n;
       ROS_INFO("Waiting for the map");
       //map_sub_ = n.subscribe("map", 1, &MapGenerator::mapCallback, this);
+      
     }
 
     void mapCallback(const nav_msgs::OccupancyGridConstPtr& map)
@@ -125,6 +126,8 @@ free_thresh: 0.196
       ROS_INFO("Done\n");
       saved_map_ = true;
       sm.data = true;
+      ros::NodeHandle n;
+      ms = n.advertise<std_msgs::Bool>("map_saved_status", 5);
       ms.publish(sm);
     }
 
@@ -134,7 +137,7 @@ free_thresh: 0.196
     std_msgs::Bool sm;
     int threshold_occupied_;
     int threshold_free_;
-    ros::Publisher ms = nh.advertise<std_msgs::Bool>("map_saved_status", 5);
+    ros::Publisher ms;
 
 };
 
