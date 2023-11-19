@@ -171,7 +171,16 @@ void saveLastOdomCallback(const nav_msgs::Odometry& msg){
   if(!bss_state && !odom_saved){
     // Save the position of the robot
     // Specify the file path
-    std::string filePath = "../Projects/RC_Project/src/patrol/world/finalExploreOdom.yaml";
+    std::string pathToHere= __FILE__;
+
+    size_t pos = pathToHere.find("/rc_map_server/src/map_saver.cpp");
+
+    // If the substring is found, erase it
+    if (pos != std::string::npos) {
+        pathToHere.erase(pos, std::string("/rc_map_server/src/map_saver.cpp").length());
+    }
+
+    std::string filePath = pathToHere + "/patrol/world/finalExploreOdom.yaml";
     // open the filestream
     std::ofstream fout(filePath);
     if (fout.is_open()) {
