@@ -59,6 +59,7 @@ loadMapFromFile(nav_msgs::GetMap::Response* resp,
                 double occ_th, double free_th, double* origin,
                 MapMode mode)
 {
+  std::cout << "FBAISABIIOANOADNOAIDBIABSIOBAOIBAIFDDDDDDDDDDDDIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << std::endl;
   SDL_Surface* img;
 
   unsigned char* pixels;

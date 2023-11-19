@@ -34,6 +34,12 @@ include_directories(
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 
+add_executable(path_cost_calc src/path_cost_calc.cpp)
+add_dependencies(path_cost_calc ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(path_cost_calc
+  ${catkin_LIBRARIES}
+)
+
 
 ## Specify libraries to link a library or executable target against
 
