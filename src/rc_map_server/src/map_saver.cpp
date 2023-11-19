@@ -35,7 +35,10 @@
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "geometry_msgs/Quaternion.h"
 
+#include <nav_msgs/Odometry.h>
 #include <std_msgs/Bool.h>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -161,6 +164,38 @@ void lmapCallback(const nav_msgs::OccupancyGridConstPtr& map){
     ROS_INFO("Latest map has been stored");
   }
 }
+bool odom_saved = false;
+
+void saveLastOdomCallback(const nav_msgs::Odometry& msg){
+  //only work when the exploration mode is false
+  if(!bss_state && !odom_saved){
+    // Save the position of the robot
+    // Specify the file path
+    std::string filePath = "../Projects/RC_Project/src/patrol/world/finalExploreOdom.yaml";
+    // open the filestream
+    std::ofstream fout(filePath);
+    if (fout.is_open()) {
+        fout << "position:\n";
+        fout << "  x: " << msg.pose.pose.position.x << "\n";
+        fout << "  y: " << msg.pose.pose.position.y << "\n";
+        fout << "  z: " << msg.pose.pose.position.z << "\n";
+
+        fout << "orientation:\n";
+        fout << "  x: " << msg.pose.pose.orientation.x << "\n";
+        fout << "  y: " << msg.pose.pose.orientation.y << "\n";
+        fout << "  z: " << msg.pose.pose.orientation.z << "\n";
+        fout << "  w: " << msg.pose.pose.orientation.w << "\n";
+
+      ROS_INFO("Saved the final odometry.");
+    
+    } else {
+        ROS_INFO("Unable to save the final odometry.");
+    }
+    //change odom_saved to true
+    odom_saved = true;
+  }
+
+}
 
 
 #define USAGE "Usage: \n" \
@@ -174,6 +209,8 @@ int main(int argc, char **argv)
   ros::Subscriber bss_sub = nh.subscribe("/explore/exploration_mode", 2, bssCallback);
   //subscribe to "map" and save the latest map
   ros::Subscriber lmap = nh.subscribe("/map",1,lmapCallback);
+  //subscribe to "odom" to save the last position
+  ros::Subscriber last_odom = nh.subscribe("/odom",1,saveLastOdomCallback);
 
   std::string mapname = "map";
   int threshold_occupied = 65;
