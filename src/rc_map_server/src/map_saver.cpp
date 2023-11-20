@@ -200,7 +200,7 @@ void saveLastOdomCallback(const nav_msgs::Odometry& msg){
 
         fout << "orientation:\n";
         fout << "  yaw: " << yaw << "\n";
-
+        fout.close();
       ROS_INFO("Saved the final odometry.");
     
     } else {
