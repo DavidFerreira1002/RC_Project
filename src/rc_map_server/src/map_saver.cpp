@@ -181,19 +181,25 @@ void saveLastOdomCallback(const nav_msgs::Odometry& msg){
     }
 
     std::string filePath = pathToHere + "/patrol/world/finalExploreOdom.yaml";
+    
+    // calculate the yaw
+    double qx,qy,qz,qw,yaw;
+    qx = msg.pose.pose.orientation.x;
+    qy = msg.pose.pose.orientation.y;
+    qz = msg.pose.pose.orientation.z;
+    qw = msg.pose.pose.orientation.w;
+
+    yaw = std::atan2(2.0 * (qw * qz + qx * qy), 1.0 - 2.0 * (qy * qy + qz * qz));
+
     // open the filestream
     std::ofstream fout(filePath);
     if (fout.is_open()) {
         fout << "position:\n";
         fout << "  x: " << msg.pose.pose.position.x << "\n";
         fout << "  y: " << msg.pose.pose.position.y << "\n";
-        fout << "  z: " << msg.pose.pose.position.z << "\n";
 
         fout << "orientation:\n";
-        fout << "  x: " << msg.pose.pose.orientation.x << "\n";
-        fout << "  y: " << msg.pose.pose.orientation.y << "\n";
-        fout << "  z: " << msg.pose.pose.orientation.z << "\n";
-        fout << "  w: " << msg.pose.pose.orientation.w << "\n";
+        fout << "  yaw: " << yaw << "\n";
 
       ROS_INFO("Saved the final odometry.");
     
