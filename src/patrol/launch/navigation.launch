@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>    
+<launch>    
 
     <!-- lança o nodo map_server, para utilizar o mapa guardado -->
     <node pkg="map_server" type="map_server" name="map_server" args="$(find patrol)/world/CurrentWorld.yaml"/>

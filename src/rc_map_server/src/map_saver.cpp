@@ -37,7 +37,16 @@
 
 #include <tf2_ros/transform_listener.h>
 #include <nav_msgs/Odometry.h>
+#include <tf2_ros/transform_listener.h>
+#include <nav_msgs/Odometry.h>
 #include <std_msgs/Bool.h>
+#include <iostream>
+#include <fstream>
+#include <tf2_ros/transform_listener.h>
+
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/TransformStamped.h>
 #include <iostream>
 #include <fstream>
 #include <tf2_ros/transform_listener.h>
@@ -65,6 +74,7 @@ class MapGenerator
       ros::NodeHandle n;
       ROS_INFO("Waiting for the map");
       //map_sub_ = n.subscribe("map", 1, &MapGenerator::mapCallback, this);
+      
     }
 
     void mapCallback(const nav_msgs::OccupancyGridConstPtr& map)
@@ -138,14 +148,20 @@ free_thresh: 0.196
       ros::NodeHandle n;
       ms = n.advertise<std_msgs::Bool>("map_saved_status", 5);
       ms.publish(sm);
+      sm.data = true;
+      ros::NodeHandle n;
+      ms = n.advertise<std_msgs::Bool>("map_saved_status", 5);
+      ms.publish(sm);
     }
 
     std::string mapname_;
     ros::Subscriber map_sub_;
     bool saved_map_;
     std_msgs::Bool sm;
+    std_msgs::Bool sm;
     int threshold_occupied_;
     int threshold_free_;
+    ros::Publisher ms;
     ros::Publisher ms;
 
 };
