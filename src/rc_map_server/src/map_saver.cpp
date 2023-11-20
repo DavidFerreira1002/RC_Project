@@ -148,20 +148,14 @@ free_thresh: 0.196
       ros::NodeHandle n;
       ms = n.advertise<std_msgs::Bool>("map_saved_status", 5);
       ms.publish(sm);
-      sm.data = true;
-      ros::NodeHandle n;
-      ms = n.advertise<std_msgs::Bool>("map_saved_status", 5);
-      ms.publish(sm);
     }
 
     std::string mapname_;
     ros::Subscriber map_sub_;
     bool saved_map_;
     std_msgs::Bool sm;
-    std_msgs::Bool sm;
     int threshold_occupied_;
     int threshold_free_;
-    ros::Publisher ms;
     ros::Publisher ms;
 
 };
