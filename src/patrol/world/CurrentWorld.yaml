@@ -1,4 +1,4 @@
-image: /home/miguel/Desktop/Robotica_Cognitiva/Code/Project/RC_Project/src/patrol/world/CurrentWorld.pgm
+image: /home/Daniel/Desktop/Cognitive_Robotics/Projects/RC_Project/src/patrol/world/CurrentWorld.pgm
 resolution: 0.020000
 origin: [-11.880000, -11.880000, 0.000000]
 negate: 0

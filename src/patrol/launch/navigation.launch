@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>    
+<launch>    
 
     <!-- lança o nodo map_server, para utilizar o mapa guardado -->
     <node pkg="map_server" type="map_server" name="map_server" args="$(find patrol)/world/CurrentWorld.yaml"/>
@@ -12,7 +13,11 @@
     </include>
     
     <!-- lançamento do mapa em simulador Gazebo -->
-    <include file="$(find patrol)/launch/museum_navigation.launch"/>
+    <include file="$(find patrol)/launch/museum_small_navigation.launch">
+        <arg name="x_pos" default="0.0"/>
+        <arg name="y_pos" default="0.0"/>
+        <arg name="yaw_angle" default="0.0"/>
+    </include>
 
     <!-- lança o move_base e os costmaps para a navegação -->
     <include file="$(find patrol)/launch/move_base_navigation.launch"/>

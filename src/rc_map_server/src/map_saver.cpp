@@ -65,6 +65,7 @@ class MapGenerator
       ros::NodeHandle n;
       ROS_INFO("Waiting for the map");
       //map_sub_ = n.subscribe("map", 1, &MapGenerator::mapCallback, this);
+      
     }
 
     void mapCallback(const nav_msgs::OccupancyGridConstPtr& map)
@@ -171,6 +172,71 @@ void lmapCallback(const nav_msgs::OccupancyGridConstPtr& map){
     finalMap = map;
     ROS_INFO("Latest map has been stored");
   }
+}
+bool odom_saved = false;
+
+void saveLastOdomCallback(const nav_msgs::Odometry& msg){
+  //only work when the exploration mode is false
+  if(!bss_state && !odom_saved){
+    // Save the position of the robot
+    // Specify the file path
+    std::string pathToHere= __FILE__;
+
+    size_t pos = pathToHere.find("/rc_map_server/src/map_saver.cpp");
+
+    // If the substring is found, erase it
+    if (pos != std::string::npos) {
+        pathToHere.erase(pos, std::string("/rc_map_server/src/map_saver.cpp").length());
+    }
+
+    std::string filePath = pathToHere + "/patrol/world/finalExploreOdom.yaml";
+
+    // geometry_msgs::PoseStamped odom_pose;
+    // odom_pose.header.frame_id = "odom";
+    // odom_pose.pose.position.x = msg.pose.pose.position.x;
+    // odom_pose.pose.position.y = msg.pose.pose.position.y;
+    // odom_pose.pose.position.y = msg.pose.pose.position.z;
+    // odom_pose.pose.orientation.x  = msg.pose.pose.orientation.x;
+    // odom_pose.pose.orientation.y  = msg.pose.pose.orientation.y;
+    // odom_pose.pose.orientation.z  = msg.pose.pose.orientation.z;
+    // odom_pose.pose.orientation.w  = msg.pose.pose.orientation.w;
+    //the above is in the /odom
+    // get the transform from /odom to /map
+    // tf2_ros::Buffer tfBuffer;
+    // tf2_ros::TransformListener tfListener(tfBuffer);
+    // tfBuffer.canTransform("target_frame", "source_frame", ros::Time(0), ros::Duration(5.0));
+    // geometry_msgs::TransformStamped transformStamped = tfBuffer.lookupTransform("map", "odom", ros::Time(0));
+    // Ttansform the pose from /odom to /map
+        // geometry_msgs::PoseStamped map_pose;
+        // tf2::doTransform(odom_pose, map_pose, transformStamped);
+
+
+    // tf2::Quaternion q = tf2::Quaternion(map_pose.pose.orientation.x,map_pose.pose.orientation.y,map_pose.pose.orientation.z,map_pose.pose.orientation.w);
+    // double yaw = q.getY();
+
+    tf2::Quaternion q = tf2::Quaternion(msg.pose.pose.orientation.x,msg.pose.pose.orientation.y,msg.pose.pose.orientation.z,msg.pose.pose.orientation.w);
+    double yaw = q.getY();
+
+
+    // open the filestream
+    std::ofstream fout(filePath);
+    if (fout.is_open()) {
+        fout << "position:\n";
+        fout << "  x: " << msg.pose.pose.position.x << "\n";
+        fout << "  y: " << msg.pose.pose.position.y << "\n";
+
+        fout << "orientation:\n";
+        fout << "  yaw: " << yaw << "\n";
+        fout.close();
+      ROS_INFO("Saved the final odometry.");
+    
+    } else {
+        ROS_INFO("Unable to save the final odometry.");
+    }
+    //change odom_saved to true
+    odom_saved = true;
+  }
+
 }
 
 bool odom_saved = false;
