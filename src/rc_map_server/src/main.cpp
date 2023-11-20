@@ -143,9 +143,12 @@ class MapServer
     {
       ROS_INFO("Loading map from image \"%s\"", map_file_name.c_str());
       try {
+        ros::NodeHandle private_nh("~");
+        ros::Subscriber mss_sub;
+        //mss_sub = private_nh.subscribe("/map_saved_status", 2, map_server::loadMapFromFile(map_resp_, map_file_name.c_str(), resolution, negate, occ_th, free_th, origin, mode));
         map_server::loadMapFromFile(&map_resp_, map_file_name.c_str(),
                                     resolution, negate, occ_th, free_th,
-                                    origin, mode);
+                                   origin, mode);
       } catch (std::runtime_error& e) {
         ROS_ERROR("%s", e.what());
         return false;
@@ -300,6 +303,7 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "map_server", ros::init_options::AnonymousName);
   ros::NodeHandle nh("~");
+
   if(argc != 3 && argc != 2)
   {
     ROS_ERROR("%s", USAGE);
