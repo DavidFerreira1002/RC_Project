@@ -10,9 +10,10 @@ from heapq import *
 
 plotting = False
 
-dist = 0
+global dist
 
 def linea(ruta):
+    global dist
     xg=[]
     yg=[]
     dist = 0
@@ -20,8 +21,7 @@ def linea(ruta):
         x=ruta[i][0]
         y=ruta[i][1]
         if (i>0):
-            print("entra")
-            dist += pow((pow((x_old - x),2) + pow((y_old - y),2)),0.5)
+            dist = dist + pow((pow((x_old - x),2) + pow((y_old - y),2)),0.5)
         x_old = x
         y_old = y
         xg.append(x)
