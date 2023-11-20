@@ -14,5 +14,5 @@
 
     ################ start rviz ################
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find astar)/rviz/astar.rviz"/>
-
+    <rosparam command="load" file="$(find patrol)/world/CurrentWorld.yaml"/>
 </launch>
