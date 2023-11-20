@@ -329,7 +329,7 @@ int main(int argc, char * argv[])
     nh_priv.param<int>("rate", rate, 10);
 
     // Subscribe topics
-    map_sub = nh.subscribe("map", 10, MapCallback);
+    map_sub = nh.subscribe("move_base/globa_costmap/map", 10, MapCallback);
     startPoint_sub = nh.subscribe("initialpose", 10, StartPointCallback);
     targetPoint_sub = nh.subscribe("move_base_simple/goal", 10, TargetPointtCallback);
     clickedPoint_sub = nh.subscribe("clicked_point", 10, ClickedPointCallback);
