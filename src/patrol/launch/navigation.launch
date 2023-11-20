@@ -1,13 +1,30 @@
 <?xml version="1.0"?>
-<launch>
+<launch>    
 
-    <node pkg="rc_map_server" type="map_server" name="map_server" args="$(find patrol)/world/CurrentWorld.yaml"/>
     
+
+
+    <node pkg="map_server" type="map_server" name="map_server" args="$(find patrol)/world/CurrentWorld.yaml"/>
+
     <include file="$(find rc_amcl)/launch/amcl.launch">
-        <arg name="initial_pose_x" default="1.6"/>
-        <arg name="initial_pose_y" default="1.6"/>
-        <arg name="initial_pose_a" default="0.0122173"/>
+        <arg name="initial_pose_x" default="-2.06051"/>
+        <arg name="initial_pose_y" default="-1.45503"/>
+        <arg name="initial_pose_a" default="0.0"/>
     </include>
+    
+    <include file="$(find patrol)/launch/museum_small_navigation.launch"> <!--liga o Gazebo-->
+        <arg name="x_pos" default="-2.06051"/>
+        <arg name="y_pos" default="-1.45503"/>
+        <arg name="yaw_angle" default="0.0"/>
+    </include>
+    <include file="$(find patrol)/launch/move_base_navigation.launch"/>
+
+    <node pkg="astar" type="astar" name="astar" output="screen">
+        <param name="Euclidean" value="true"/>
+        <param name="OccupyThresh" value="-1"/>
+        <param name="InflateRadius" value="0.25"/>
+        <param name="rate" value="10"/>
+    </node>
 
     <node type="rviz" name="rviz" pkg="rviz" args="-d $(find rc_gmapping)/rviz/slam_turtle.rviz" />
     <include file="$(find patrol)/launch/museum_small.launch"/> <!--liga o Gazebo-->

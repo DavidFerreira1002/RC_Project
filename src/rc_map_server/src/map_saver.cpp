@@ -35,10 +35,16 @@
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "geometry_msgs/Quaternion.h"
 
+#include <tf2_ros/transform_listener.h>
 #include <nav_msgs/Odometry.h>
 #include <std_msgs/Bool.h>
 #include <iostream>
 #include <fstream>
+#include <tf2_ros/transform_listener.h>
+
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/TransformStamped.h>
 
 using namespace std;
 
@@ -181,20 +187,44 @@ void saveLastOdomCallback(const nav_msgs::Odometry& msg){
     }
 
     std::string filePath = pathToHere + "/patrol/world/finalExploreOdom.yaml";
+
+    // geometry_msgs::PoseStamped odom_pose;
+    // odom_pose.header.frame_id = "odom";
+    // odom_pose.pose.position.x = msg.pose.pose.position.x;
+    // odom_pose.pose.position.y = msg.pose.pose.position.y;
+    // odom_pose.pose.position.y = msg.pose.pose.position.z;
+    // odom_pose.pose.orientation.x  = msg.pose.pose.orientation.x;
+    // odom_pose.pose.orientation.y  = msg.pose.pose.orientation.y;
+    // odom_pose.pose.orientation.z  = msg.pose.pose.orientation.z;
+    // odom_pose.pose.orientation.w  = msg.pose.pose.orientation.w;
+    //the above is in the /odom
+    // get the transform from /odom to /map
+    // tf2_ros::Buffer tfBuffer;
+    // tf2_ros::TransformListener tfListener(tfBuffer);
+    // tfBuffer.canTransform("target_frame", "source_frame", ros::Time(0), ros::Duration(5.0));
+    // geometry_msgs::TransformStamped transformStamped = tfBuffer.lookupTransform("map", "odom", ros::Time(0));
+    // Ttansform the pose from /odom to /map
+        // geometry_msgs::PoseStamped map_pose;
+        // tf2::doTransform(odom_pose, map_pose, transformStamped);
+
+
+    // tf2::Quaternion q = tf2::Quaternion(map_pose.pose.orientation.x,map_pose.pose.orientation.y,map_pose.pose.orientation.z,map_pose.pose.orientation.w);
+    // double yaw = q.getY();
+
+    tf2::Quaternion q = tf2::Quaternion(msg.pose.pose.orientation.x,msg.pose.pose.orientation.y,msg.pose.pose.orientation.z,msg.pose.pose.orientation.w);
+    double yaw = q.getY();
+
+
     // open the filestream
     std::ofstream fout(filePath);
     if (fout.is_open()) {
         fout << "position:\n";
         fout << "  x: " << msg.pose.pose.position.x << "\n";
         fout << "  y: " << msg.pose.pose.position.y << "\n";
-        fout << "  z: " << msg.pose.pose.position.z << "\n";
 
         fout << "orientation:\n";
-        fout << "  x: " << msg.pose.pose.orientation.x << "\n";
-        fout << "  y: " << msg.pose.pose.orientation.y << "\n";
-        fout << "  z: " << msg.pose.pose.orientation.z << "\n";
-        fout << "  w: " << msg.pose.pose.orientation.w << "\n";
-
+        fout << "  yaw: " << yaw << "\n";
+        fout.close();
       ROS_INFO("Saved the final odometry.");
     
     } else {
