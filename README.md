@@ -8,7 +8,9 @@ Este projeto é um protótipo de um robô móvel autónomo para patrulhamento, a
 
 Este projeto foi feito em ROS1 Noetic e precisa dos seguintes packages (sudo apt install package_name):
 
-
+```bash
+sudo apt install ros-noetic-turtlebot3-msgs ros-noetic-turtlebot3-bringup ros-noetic-turtlebot3-slam ros-noetic-turtlebot3-navigation ros-noetic-joint-state-publisher-gui ros-noetic-navigation ros-noetic-gmapping ros-noetic-explore-lite
+```
 
 ## Criação do workspace
 
