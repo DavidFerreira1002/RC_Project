@@ -35,10 +35,20 @@
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "geometry_msgs/Quaternion.h"
 
+#include <tf2_ros/transform_listener.h>
+#include <nav_msgs/Odometry.h>
 #include <std_msgs/Bool.h>
+#include <iostream>
+#include <fstream>
+#include <tf2_ros/transform_listener.h>
+
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/TransformStamped.h>
 
 using namespace std;
 
+//variável que afirma se o mapa já foi gravado
 bool map_is_saved = false;
 
 
@@ -124,13 +134,19 @@ free_thresh: 0.196
 
       ROS_INFO("Done\n");
       saved_map_ = true;
+      sm.data = true;
+      ros::NodeHandle n;
+      ms = n.advertise<std_msgs::Bool>("map_saved_status", 5);
+      ms.publish(sm);
     }
 
     std::string mapname_;
     ros::Subscriber map_sub_;
     bool saved_map_;
+    std_msgs::Bool sm;
     int threshold_occupied_;
     int threshold_free_;
+    ros::Publisher ms;
 
 };
 
@@ -139,9 +155,11 @@ free_thresh: 0.196
 bool bss_state = true;
 nav_msgs::OccupancyGridConstPtr finalMap;
 
-
+//callback caso haja alteração do modo de exploração
 void bssCallback(const std_msgs::Bool& bss){
 	bss_state = bss.data;
+
+  //caso o modo de exploração tenha terminado
   if (!bss_state) {
     ROS_INFO("Tasked to save the map");
   }
@@ -155,6 +173,71 @@ void lmapCallback(const nav_msgs::OccupancyGridConstPtr& map){
   }
 }
 
+bool odom_saved = false;
+
+void saveLastOdomCallback(const nav_msgs::Odometry& msg){
+  //only work when the exploration mode is false
+  if(!bss_state && !odom_saved){
+    // Save the position of the robot
+    // Specify the file path
+    std::string pathToHere= __FILE__;
+
+    size_t pos = pathToHere.find("/rc_map_server/src/map_saver.cpp");
+
+    // If the substring is found, erase it
+    if (pos != std::string::npos) {
+        pathToHere.erase(pos, std::string("/rc_map_server/src/map_saver.cpp").length());
+    }
+
+    std::string filePath = pathToHere + "/patrol/world/finalExploreOdom.yaml";
+
+    // geometry_msgs::PoseStamped odom_pose;
+    // odom_pose.header.frame_id = "odom";
+    // odom_pose.pose.position.x = msg.pose.pose.position.x;
+    // odom_pose.pose.position.y = msg.pose.pose.position.y;
+    // odom_pose.pose.position.y = msg.pose.pose.position.z;
+    // odom_pose.pose.orientation.x  = msg.pose.pose.orientation.x;
+    // odom_pose.pose.orientation.y  = msg.pose.pose.orientation.y;
+    // odom_pose.pose.orientation.z  = msg.pose.pose.orientation.z;
+    // odom_pose.pose.orientation.w  = msg.pose.pose.orientation.w;
+    //the above is in the /odom
+    // get the transform from /odom to /map
+    // tf2_ros::Buffer tfBuffer;
+    // tf2_ros::TransformListener tfListener(tfBuffer);
+    // tfBuffer.canTransform("target_frame", "source_frame", ros::Time(0), ros::Duration(5.0));
+    // geometry_msgs::TransformStamped transformStamped = tfBuffer.lookupTransform("map", "odom", ros::Time(0));
+    // Ttansform the pose from /odom to /map
+        // geometry_msgs::PoseStamped map_pose;
+        // tf2::doTransform(odom_pose, map_pose, transformStamped);
+
+
+    // tf2::Quaternion q = tf2::Quaternion(map_pose.pose.orientation.x,map_pose.pose.orientation.y,map_pose.pose.orientation.z,map_pose.pose.orientation.w);
+    // double yaw = q.getY();
+
+    tf2::Quaternion q = tf2::Quaternion(msg.pose.pose.orientation.x,msg.pose.pose.orientation.y,msg.pose.pose.orientation.z,msg.pose.pose.orientation.w);
+    double yaw = q.getY();
+
+
+    // open the filestream
+    std::ofstream fout(filePath);
+    if (fout.is_open()) {
+        fout << "position:\n";
+        fout << "  x: " << msg.pose.pose.position.x << "\n";
+        fout << "  y: " << msg.pose.pose.position.y << "\n";
+
+        fout << "orientation:\n";
+        fout << "  yaw: " << yaw << "\n";
+        fout.close();
+      ROS_INFO("Saved the final odometry.");
+    
+    } else {
+        ROS_INFO("Unable to save the final odometry.");
+    }
+    //change odom_saved to true
+    odom_saved = true;
+  }
+
+}
 
 #define USAGE "Usage: \n" \
               "  map_saver -h\n"\
@@ -167,7 +250,9 @@ int main(int argc, char **argv)
   ros::Subscriber bss_sub = nh.subscribe("/explore/exploration_mode", 2, bssCallback);
   //subscribe to "map" and save the latest map
   ros::Subscriber lmap = nh.subscribe("/map",1,lmapCallback);
-
+  //subscribe to "odom" to save the last position
+  ros::Subscriber last_odom = nh.subscribe("/odom",1,saveLastOdomCallback);
+  
   std::string mapname = "map";
   int threshold_occupied = 65;
   int threshold_free = 25;
@@ -243,8 +328,9 @@ int main(int argc, char **argv)
   
   ros::Rate rate(10);
 
+  //enquanto o mapa não é gravado
   while(!map_is_saved && ros::ok()) {
-    //entra sempre aqui e não é desligado
+    //caso tenha terminado a exploração e não esteja ainda a gravar nenhum mapa
     if (!bss_state && !saving) {
       saving = true;
       //create the object

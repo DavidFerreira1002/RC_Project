@@ -41,6 +41,7 @@
 
 #include <std_msgs/Bool.h>
 
+//publicador para enviar o estado da exploração
 ros::Publisher boolean_state_publisher;
 
 inline static bool operator==(const geometry_msgs::Point& one,
@@ -82,11 +83,11 @@ Explore::Explore()
         private_nh_.advertise<visualization_msgs::MarkerArray>("frontiers", 10);
   }
 
+  //publicador do estado da exploração
   boolean_state_publisher =
         private_nh_.advertise<std_msgs::Bool>("exploration_mode", 10);
 
   ROS_INFO("Waiting to connect to move_base server");
-  ROS_INFO("is this the right file?");
   move_base_client_.waitForServer();
   ROS_INFO("Connected to move_base server");
 
@@ -295,10 +296,13 @@ void Explore::start()
 
 void Explore::stop()
 {
+  //define a mensagem a publicar
   std_msgs::Bool bsp_msg;
 
+  //define o estado
   bsp_msg.data = false;
 
+  //publica, sinalizando o final da exploração
   boolean_state_publisher.publish(bsp_msg);
   move_base_client_.cancelAllGoals();
   exploring_timer_.stop();

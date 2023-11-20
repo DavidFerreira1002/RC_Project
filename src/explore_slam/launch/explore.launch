@@ -1,4 +1,5 @@
 <launch>
+<!-- lançamento do nodo explore adaptado -->
 <node pkg="explore_slam" type="explore" respawn="false" name="explore" output="screen">
   <param name="robot_base_frame" value="base_link"/>
   <param name="costmap_topic" value="map"/>

@@ -171,19 +171,123 @@ void TargetPointtCallback(const geometry_msgs::PoseStamped& msg)
 
 void ClickedPointCallback(const geometry_msgs::PointStamped& msg)
 {
+    ros::NodeHandle nh;
+
     Point2d src_point = Point2d(msg.point.x, msg.point.y);
     OccGridParam.Map2ImageTransform(src_point, clickedPoint);
 
     clickedPointsSet.push_back(clickedPoint);
 
+
+    std::string pathToHere= __FILE__;
+
+    size_t pos = pathToHere.find("/Astar/src/main.cpp");
+
+    if (pos != std::string::npos) {
+        pathToHere.erase(pos, std::string("/Astar/src/main.cpp").length());
+    }
+
+    std::string filePath = pathToHere + "/patrol/world/CurrentWorld.graph";
+
+    std::ifstream fin;
+    fin.open(pathToHere + "/patrol/world/CurrentWorld.pgm");
+
+    char magicNumber[2];
+    fin.read(magicNumber, 2);
+    //cout << magicNumber;
+    char non_info[37];
+    fin.read(non_info, 37);
+    //cout << non_info<< "\n";
+    //fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n' );
+    //std::vector<char> non_usable_info;
+
+    //fin.read(non_usable_info,36)
+    //fin.ignore(36, '\n');
+    //fin.ignore();
+    
+    //int width, height;
+    //fin.read(reinterpret_cast<char*>(&width), sizeof(width));
+    //fin.read(reinterpret_cast<char*>(&height), sizeof(height));
+
+    std::string width, height;
+    fin >> width >> height;
+    fin.close();
+
+    int dimension = clickedPointsSet.size();
+    float resolution;
+    std::vector<float> origin;
+    
+    nh.getParam("resolution", resolution);
+    nh.getParam("origin", origin);
+    
+    //cout << resolution << "\n";
+
+    float offset_x = origin.at(0);
+    float offset_y = origin.at(1);
+    
+
+
+    //fin.open(pathToHere + "/patrol/world/CurrentWorld.yaml");
+    /*
+    const std::string path_yaml = pathToHere + "/patrol/world/CurrentWorld.yaml";
+    YAML::Node yamlNode = YAML::LoadFile(path_yaml);
+    float resolution; //= yamlNode["resolution"].as<float>();
+    std::string offset_x; //= yamlNode["origin"][0].as<string>();
+    std::string offset_y;// = yamlNode["origin"][1].as<string>();*/
+    
+    //fin.close();
+
+    //std::ofstream fout;
+    //fout.open(filePath);
+
+    //std::ofstream outputFile("teste.txt", std::ios::trunc);
+
+    //outputFile.open();
+    /*
+    if (outputFile.is_open()){
+        //info mapa
+        std::cout << "i'm in \n";
+    }
+    else{
+        std::cerr << "Error creating or overwriting file \n";
+    }*/
+    //if (fout.is_open()){
+    int width_int = stoi(width);
+    int height_int = stoi(height);
+    std::ofstream fout;
+    fout.open(filePath);
+
+    fout << dimension << "\n";
+    fout << width << "\n";
+    fout << height << "\n";
+    fout << resolution << "\n";
+    fout << offset_x << "\n";
+    fout << offset_y << "\n" << "\n";
+
+
     for (int i = 0; i < clickedPointsSet.size(); ++i)
     {
+        fout << i << "\n";
+        fout << clickedPointsSet[i].x << "\n";
+        fout << clickedPointsSet[i].y << "\n";
+        fout << clickedPointsSet.size()-1 << "\n";
+        //fout.close();
+
         for (int j = 0; j < clickedPointsSet.size(); ++j) 
         {
             startPoint = clickedPointsSet[i];
             startpoint_flag = true;
-            if (j > i)
+            if (j != i)
             {
+                if (!fout.is_open()){
+                    fout.open(filePath, ios::app);
+                }
+
+                fout << j << "\n";
+                fout << "N" << "\n";
+                //fout << "cost" << "\n";
+                fout.close();
+                
                 targetPoint = clickedPointsSet[j];
                 targetpoint_flag = true;
                 id_ini = i;
@@ -196,7 +300,11 @@ void ClickedPointCallback(const geometry_msgs::PointStamped& msg)
                 }
             }
         }
+        fout.open(filePath, ios::app);
+        fout << "\n";
     }
+    //}
+    //fout.close();
 }
 
 //-------------------------------- Main function ---------------------------------//

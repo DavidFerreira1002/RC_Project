@@ -140,11 +140,15 @@ Initial map dimensions and resolution:
 // compute linear index for given map coords
 #define MAP_IDX(sx, i, j) ((sx) * (j) + (i))
 
+//estado inicial, sinalizando modo de exploração
 bool bss_state = true;
+//subscritor que alterará o modo de exploração
 ros::Subscriber bss_sub;
 
+//callback caso receba notificação do fim da exploração
 void bssCallback(const std_msgs::Bool& bss){
 
+  //atualiza a variável que serve de interruptor da exploração
 	bss_state = bss.data;
   if (bss_state) {
     ROS_INFO("Exploration mode is on");
@@ -155,7 +159,6 @@ void bssCallback(const std_msgs::Bool& bss){
 }
 
 
-//tHe cOnSTrucToR bEiNg uSed iS tHIs oNe
 SlamGMapping::SlamGMapping():
   map_to_odom_(tf::Transform(tf::createQuaternionFromRPY( 0, 0, 0 ), tf::Point(0, 0, 0 ))),
   laser_count_(0), private_nh_("~"), scan_filter_sub_(NULL), scan_filter_(NULL), transform_thread_(NULL)
@@ -631,6 +634,7 @@ SlamGMapping::addScan(const sensor_msgs::LaserScan& scan, GMapping::OrientedPoin
 void
 SlamGMapping::laserCallback(const sensor_msgs::LaserScan::ConstPtr& scan)
 {
+  //caso esteja em modo de exploração
   if (bss_state) {
     laser_count_++;
     if ((laser_count_ % throttle_scans_) != 0)

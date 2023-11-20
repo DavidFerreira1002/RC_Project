@@ -145,6 +145,26 @@ Node* Astar::FindPath()
         if(curX == targetPoint.x && curY == targetPoint.y)
         {
             std::cout << "cost: " + std::to_string(curCost) << std::endl;
+
+            std::string pathToHere= __FILE__;
+
+            size_t pos = pathToHere.find("/Astar/src/Astar.cpp");
+
+            if (pos != std::string::npos) {
+                pathToHere.erase(pos, std::string("/Astar/src/Astar.cpp").length());
+            }
+
+            std::string filePath = pathToHere + "/patrol/world/CurrentWorld.graph";
+
+            std::ofstream fout;
+            fout.open(filePath, ios::app);
+            //if (!fout.is_open()){
+            //    fout.open(filePath);
+            //}
+
+            fout << curCost << "\n";
+            fout.close();
+
             return CurNode; // Find a valid path
         }
 
