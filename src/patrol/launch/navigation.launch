@@ -1,22 +1,33 @@
 <?xml version="1.0"?>
-<launch>
+<launch>    
 
-    <!-- Load parameters from YAML file -->
-    <rosparam command="load" file="$(find patrol)/world/finalExploreOdom.yaml" />
-
-    <node pkg="rc_map_server" type="map_server" name="map_server" args="$(find patrol)/world/CurrentWorld.yaml"/>
     
+
+
+    <node pkg="map_server" type="map_server" name="map_server" args="$(find patrol)/world/CurrentWorld.yaml"/>
+
     <include file="$(find rc_amcl)/launch/amcl.launch">
-        <!-- <arg name="initial_pose_x" default="1.6"/>
-        <arg name="initial_pose_y" default="1.6"/>
-        <arg name="initial_pose_a" default="0.0122173"/> -->
-
-        <arg name="initial_pose_x" value="$(arg position/x)"/>
-        <arg name="initial_pose_y" value="$(arg position/y)"/>
-        <arg name="initial_pose_a" value="$(arg orientation/yaw)"/>
+        <arg name="initial_pose_x" default="-2.06051"/>
+        <arg name="initial_pose_y" default="-1.45503"/>
+        <arg name="initial_pose_a" default="0.0"/>
     </include>
+    
+    <include file="$(find patrol)/launch/museum_small_navigation.launch"> <!--liga o Gazebo-->
+        <arg name="x_pos" default="-2.06051"/>
+        <arg name="y_pos" default="-1.45503"/>
+        <arg name="yaw_angle" default="0.0"/>
+    </include>
+    <include file="$(find patrol)/launch/move_base_navigation.launch"/>
 
-    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find rc_gmapping)/rviz/slam_turtle.rviz" />
-    <include file="$(find patrol)/launch/museum_small.launch"/> <!--liga o Gazebo-->
-    <!-- <include file="$(find patrol)/launch/move_base.launch"/> -->
+    <node pkg="astar" type="astar" name="astar" output="screen">
+        <param name="Euclidean" value="true"/>
+        <param name="OccupyThresh" value="-1"/>
+        <param name="InflateRadius" value="0.25"/>
+        <param name="rate" value="10"/>
+    </node>
+
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find astar)/rviz/astar.rviz"/>
+    <!-- <node type="rviz" name="rviz" pkg="rviz" args="-d $(find rc_gmapping)/rviz/slam_turtle.rviz" /> -->
+    
+    
 </launch>

@@ -6,6 +6,9 @@ find_package(catkin REQUIRED
             roscpp
             nav_msgs
             tf2
+            tf2_ros
+            geometry_msgs # Include geometry_msgs as a dependency
+            tf2_geometry_msgs
         )
 
 find_package(Bullet REQUIRED)
@@ -36,6 +39,9 @@ catkin_package(
         roscpp
         nav_msgs
         tf2
+        tf2_ros
+        geometry_msgs
+        tf2_geometry_msgs
 )
 
 include_directories(
