@@ -23,10 +23,9 @@ cd workspace_name
 
 ```
 
-Copy the src folder in to the workspace_name folder
+Copia os ficheiros para dentro do src folder no workspace_name, na consola verifica que está no workspace_name folder, e faz o comando:
 
 ```bash
--cd..
 -catkin_make
 ```
 
