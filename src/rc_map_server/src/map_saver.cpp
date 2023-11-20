@@ -35,7 +35,10 @@
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "geometry_msgs/Quaternion.h"
 
+#include <nav_msgs/Odometry.h>
 #include <std_msgs/Bool.h>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -54,7 +57,8 @@ class MapGenerator
     {
       ros::NodeHandle n;
       ROS_INFO("Waiting for the map");
-      map_sub_ = n.subscribe("map", 1, &MapGenerator::mapCallback, this);
+      //map_sub_ = n.subscribe("map", 1, &MapGenerator::mapCallback, this);
+      
     }
 
     void mapCallback(const nav_msgs::OccupancyGridConstPtr& map)
@@ -124,28 +128,83 @@ free_thresh: 0.196
 
       ROS_INFO("Done\n");
       saved_map_ = true;
+      sm.data = true;
+      ros::NodeHandle n;
+      ms = n.advertise<std_msgs::Bool>("map_saved_status", 5);
+      ms.publish(sm);
     }
 
     std::string mapname_;
     ros::Subscriber map_sub_;
     bool saved_map_;
+    std_msgs::Bool sm;
     int threshold_occupied_;
     int threshold_free_;
+    ros::Publisher ms;
 
 };
 
 
 
 bool bss_state = true;
+nav_msgs::OccupancyGridConstPtr finalMap;
+
 
 void bssCallback(const std_msgs::Bool& bss){
-  ROS_INFO(" ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE \n ALGO MESMO BUEDA GRANDE");
 	bss_state = bss.data;
   if (!bss_state) {
     ROS_INFO("Tasked to save the map");
   }
 }
 
+void lmapCallback(const nav_msgs::OccupancyGridConstPtr& map){
+  //do this while the exploration mode is true
+  if(bss_state){
+    finalMap = map;
+    ROS_INFO("Latest map has been stored");
+  }
+}
+bool odom_saved = false;
+
+void saveLastOdomCallback(const nav_msgs::Odometry& msg){
+  //only work when the exploration mode is false
+  if(!bss_state && !odom_saved){
+    // Save the position of the robot
+    // Specify the file path
+    std::string pathToHere= __FILE__;
+
+    size_t pos = pathToHere.find("/rc_map_server/src/map_saver.cpp");
+
+    // If the substring is found, erase it
+    if (pos != std::string::npos) {
+        pathToHere.erase(pos, std::string("/rc_map_server/src/map_saver.cpp").length());
+    }
+
+    std::string filePath = pathToHere + "/patrol/world/finalExploreOdom.yaml";
+    // open the filestream
+    std::ofstream fout(filePath);
+    if (fout.is_open()) {
+        fout << "position:\n";
+        fout << "  x: " << msg.pose.pose.position.x << "\n";
+        fout << "  y: " << msg.pose.pose.position.y << "\n";
+        fout << "  z: " << msg.pose.pose.position.z << "\n";
+
+        fout << "orientation:\n";
+        fout << "  x: " << msg.pose.pose.orientation.x << "\n";
+        fout << "  y: " << msg.pose.pose.orientation.y << "\n";
+        fout << "  z: " << msg.pose.pose.orientation.z << "\n";
+        fout << "  w: " << msg.pose.pose.orientation.w << "\n";
+
+      ROS_INFO("Saved the final odometry.");
+    
+    } else {
+        ROS_INFO("Unable to save the final odometry.");
+    }
+    //change odom_saved to true
+    odom_saved = true;
+  }
+
+}
 
 
 #define USAGE "Usage: \n" \
@@ -156,14 +215,16 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "map_saver");
 	ros::NodeHandle nh;
-
   ros::Subscriber bss_sub = nh.subscribe("/explore/exploration_mode", 2, bssCallback);
+  //subscribe to "map" and save the latest map
+  ros::Subscriber lmap = nh.subscribe("/map",1,lmapCallback);
+  //subscribe to "odom" to save the last position
+  ros::Subscriber last_odom = nh.subscribe("/odom",1,saveLastOdomCallback);
 
   std::string mapname = "map";
   int threshold_occupied = 65;
   int threshold_free = 25;
 
-  ROS_INFO("is this one the right one?");
 
   for(int i=1; i<argc; i++)
   {
@@ -230,19 +291,21 @@ int main(int argc, char **argv)
     ROS_ERROR("threshold_free must be smaller than threshold_occupied");
     return 1;
   }
-
-
+  
   bool saving = false;
-
+  
   ros::Rate rate(10);
 
   while(!map_is_saved && ros::ok()) {
     //entra sempre aqui e não é desligado
     if (!bss_state && !saving) {
-      ROS_INFO("da ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \nda ba dee da ba dai \n");
       saving = true;
+      //create the object
       MapGenerator mg(mapname, threshold_occupied, threshold_free);
-      map_is_saved = mg.saved_map_;
+      //save the finalMap, that was saved in lmapCallback
+      mg.mapCallback(finalMap);
+      //put map_is_saved to true to break the cycle
+      map_is_saved = mg.saved_map_; 
     }
 
     rate.sleep();
