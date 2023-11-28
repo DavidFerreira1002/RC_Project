@@ -12,7 +12,7 @@
     </include>
     
     <!-- lançamento do mapa em simulador Gazebo -->
-    <include file="$(find patrol)/launch/museum_small_navigation.launch">
+    <include file="$(find patrol)/launch/museum_navigation.launch">
         <arg name="x_pos" default="0.0"/>
         <arg name="y_pos" default="0.0"/>
         <arg name="yaw_angle" default="0.0"/>

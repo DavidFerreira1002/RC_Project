@@ -3,16 +3,16 @@
   <!-- Arguments -->
   <!-- definição do modelo do robô e da sua posição inicial -->
   <arg name="model" default="waffle" doc="model type [burger, waffle, waffle_pi]"/>
-  <arg name="x_pos" default="1.6"/>
-  <arg name="y_pos" default="1.6"/>
+  <arg name="x_pos" default="0.0"/>
+  <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.0"/>
   <!-- <arg name="yaw_angle" default="0.0122173"/> -->
 
-  <!-- <env name="GAZEBO_MODEL_PATH" value="$(find patrol)/model:$(optenv GAZEBO_MODEL_PATH)" /> -->
+  <env name="GAZEBO_MODEL_PATH" value="$(find patrol)/model:$(optenv GAZEBO_MODEL_PATH)" />
 
   <!-- definição do mundo Gazebo, a partir do ficheiro museum_final.world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find patrol)/world/museum_final.world"/>
+    <arg name="world_name" value="$(find patrol)/world/museum_base.world"/>
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>
