@@ -1,0 +1,8 @@
+[Config]
+map: grid
+nrobots: 1
+algorithm: HCR
+locmode: AMCL
+navmode: ros
+gwait: 0
+term: xterm
