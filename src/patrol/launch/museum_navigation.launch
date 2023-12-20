@@ -5,6 +5,7 @@
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.0"/>
   <arg name="yaw_angle" default="0.0"/>
+  <arg name="world_name" default="$(find patrol)/world/museum_base.world"/>
 
   <!-- <remap from="base_scan" to="scan"/> -->
 

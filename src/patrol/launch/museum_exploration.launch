@@ -6,6 +6,7 @@
   <arg name="x_pos" default="0.0"/>
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.0"/>
+  <arg name="world_name" default="$(find patrol)/world/museum_base.world"/>
   <!-- <arg name="yaw_angle" default="0.0122173"/> -->
 
   <env name="GAZEBO_MODEL_PATH" value="$(find patrol)/model:$(optenv GAZEBO_MODEL_PATH)" />
