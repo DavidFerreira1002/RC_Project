@@ -2,6 +2,8 @@
 <launch>
 <arg name="robotname" default="robot_0" />
 <node pkg="amcl" type="amcl" name="amcl" args="scan:=base_scan">
+  <!--global namespace to access the map server-->
+  <remap from="static_map" to="/static_map"/>  <!-- map published by map_server -->
   <!-- Publish scans from best pose at a max of 10 Hz -->
   <param name="odom_model_type" value="diff"/>
   <param name="odom_alpha5" value="0.1"/>

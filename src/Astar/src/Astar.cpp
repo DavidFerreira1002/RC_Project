@@ -154,7 +154,7 @@ Node* Astar::FindPath()
                 pathToHere.erase(pos, std::string("/Astar/src/Astar.cpp").length());
             }
 
-            std::string filePath = pathToHere + "/patrol/world/CurrentWorld.graph";
+            std::string filePath = pathToHere + "/patrol/world/CurrentWorld/CurrentWorld.graph";
 
             std::ofstream fout;
             fout.open(filePath, ios::app);

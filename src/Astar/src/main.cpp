@@ -187,10 +187,10 @@ void ClickedPointCallback(const geometry_msgs::PointStamped& msg)
         pathToHere.erase(pos, std::string("/Astar/src/main.cpp").length());
     }
 
-    std::string filePath = pathToHere + "/patrol/world/CurrentWorld.graph";
+    std::string filePath = pathToHere + "/patrol/world/CurrentWorld/CurrentWorld.graph";
 
     std::ifstream fin;
-    fin.open(pathToHere + "/patrol/world/CurrentWorld.pgm");
+    fin.open(pathToHere + "/patrol/world/CurrentWorld/CurrentWorld.pgm");
 
     char magicNumber[2];
     fin.read(magicNumber, 2);
