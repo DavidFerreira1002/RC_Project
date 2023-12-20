@@ -1,12 +1,18 @@
 <?xml version="1.0"?>
 <launch>
+    <arg name="automatic_exploration" default="false"/>
+
     <!-- lançamento do mapa em simulador Gazebo -->
     <include file="$(find patrol)/launch/museum_exploration.launch"/>
 
     <!-- lançamento do algoritmo SLAM GMapping -->
     <include file="$(find rc_gmapping)/launch/gmapping.launch"/>
 
-    <!-- lançamento do move_base, para trajetórias e costmaps-->
-    <include file="$(find patrol)/launch/move_base_exploration.launch"/>
-
+    <!--if="$(arg automatic_exploration)"/-->
+    <!-- lançamento do move_base, para trajetórias e costmaps, se a exploracao automatica estiver ligada-->
+    <include file="$(find patrol)/launch/move_base_exploration.launch" if="$(arg automatic_exploration)"/>
+    
+    <!--unless="$(arg automatic_exploration)"/-->
+    <!-- lancamento do teleop_key se a exploracao automatica estiver desativada-->
+    <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard" output="screen" unless="$(arg automatic_exploration)"/>
 </launch>
