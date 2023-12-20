@@ -104,10 +104,15 @@ void GetGraphInfo (vertex *vertex_web, uint dimension, const char* graph_file){
 	vertex_web[i].x += OFFSET_X;
 	
 	r=fscanf (file, "%f", &vertex_web[i].y);
+  vertex_web[i].y = HEIGHT_PX - vertex_web[i].y;
 	vertex_web[i].y *= RESOLUTION; //convert to m
 	vertex_web[i].y += OFFSET_Y;
 	
 	r=fscanf (file, "%u", &vertex_web[i].num_neigh);
+
+  ROS_INFO("ID: %u", vertex_web[i].id);
+  ROS_INFO("X is: %f", vertex_web[i].x);
+  ROS_INFO("Y is: %f", vertex_web[i].y);
 	
 	for (j=0;j<vertex_web[i].num_neigh; j++){
 	  r=fscanf (file, "%u", &vertex_web[i].id_neigh[j]);

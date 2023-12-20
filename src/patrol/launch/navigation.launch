@@ -2,7 +2,7 @@
 <launch>    
 
     <!-- lança o nodo map_server, para utilizar o mapa guardado -->
-    <node pkg="map_server" type="map_server" name="map_server" args="$(find patrol)/world/CurrentWorld.yaml"/>
+    <node pkg="map_server" type="map_server" name="map_server" args="$(find patrol)/world/CurrentWorld/CurrentWorld.yaml"/>
 
     <!-- lança o ficheiro que ativa o amcl, definindo a posição inicial estimada do robô-->
     <include file="$(find patrol)/launch/amcl.launch">
@@ -34,7 +34,7 @@
     <!-- <node type="rviz" name="rviz" pkg="rviz" args="-d $(find rc_gmapping)/rviz/slam_turtle.rviz" /> -->
 
     <!-- leitura do ficheiro do mapa, para a construção do grafo -->
-    <rosparam command="load" file="$(find patrol)/world/CurrentWorld.yaml"/>
+    <rosparam command="load" file="$(find patrol)/world/CurrentWorld/CurrentWorld.yaml"/>
     
     
 </launch>

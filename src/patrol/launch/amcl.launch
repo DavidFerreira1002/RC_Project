@@ -5,9 +5,18 @@
   <arg name="initial_pose_x" default="0.0"/>
   <arg name="initial_pose_y" default="0.0"/>
   <arg name="initial_pose_a" default="0.0"/>
+  <arg name="prefix" default="" />
 
   <!-- AMCL -->
   <node pkg="amcl" type="amcl" name="amcl">
+
+    <remap from="static_map" to="/static_map"/> 
+
+    <param name="global_frame_id" value="/map"/>
+
+    <!--correct frame ids with prefix-->
+    <param name="odom_frame_id" value="$(arg prefix)/odom"/>
+    <param name="base_frame_id" value="$(arg prefix)/base_link"/>
 
     <param name="min_particles"             value="500"/>
     <param name="max_particles"             value="3000"/>
@@ -40,8 +49,6 @@
     <param name="odom_alpha2"               value="0.1"/>
     <param name="odom_alpha3"               value="0.1"/>
     <param name="odom_alpha4"               value="0.1"/>
-    <param name="odom_frame_id"             value="odom"/>
-    <param name="base_frame_id"             value="base_footprint"/>
 
   </node>
 </launch>

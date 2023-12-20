@@ -40,7 +40,7 @@
   <node type="rviz" name="rviz" pkg="rviz" args="-d $(find rc_gmapping)/rviz/slam_turtle.rviz" />
 
   <!-- lança o nodo map_saver, que guardará o mapa na diretoria do args -->
-  <node pkg="rc_map_server" name="map_saver" type="map_saver" args="-f $(find patrol)/world/CurrentWorld" output="screen"/>
+  <node pkg="rc_map_server" name="map_saver" type="map_saver" args="-f $(find patrol)/world/CurrentWorld/CurrentWorld" output="screen"/>
 
 </launch>
 
