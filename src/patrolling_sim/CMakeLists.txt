@@ -115,10 +115,6 @@ add_library(SSIPatrolAgent
   src/SSIPatrolAgent.cpp
 )
 
-add_executable(init_pos_calc src/init_pos_calc.cpp)
-target_link_libraries(init_pos_calc ${catkin_LIBRARIES})
-add_dependencies(init_pos_calc ${catkin_EXPORTED_TARGETS})
-
 ## Declare a cpp executable
 add_executable(Conscientious_Reactive src/Conscientious_Reactive_Agent.cpp)
 ## Specify libraries to link a library or executable target against

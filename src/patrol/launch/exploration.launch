@@ -3,7 +3,12 @@
     <arg name="automatic_exploration" default="false"/>
 
     <!-- lançamento do mapa em simulador Gazebo -->
-    <include file="$(find patrol)/launch/museum_exploration.launch"/>
+    <include file="$(find patrol)/launch/museum_exploration.launch">
+        <arg name="world_name" value="$(find patrol)/world/museum_base.world"/>
+        <arg name="x_pos" default="0.0"/>
+        <arg name="y_pos" default="0.0"/>
+        <arg name="z_pos" default="0.0"/>
+    </include>
 
     <!-- lançamento do algoritmo SLAM GMapping -->
     <include file="$(find rc_gmapping)/launch/gmapping.launch"/>

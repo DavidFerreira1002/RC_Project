@@ -1,8 +1,8 @@
 [Config]
-map: grid
-nrobots: 1
-algorithm: HCR
-locmode: AMCL
+map: cumberland
+nrobots: 2
+algorithm: CBLS
+locmode: fake_localization
 navmode: ros
 gwait: 0
-term: xterm
+term: gnome-terminal

@@ -77,9 +77,20 @@ void PatrolAgent::init(int argc, char** argv) {
     
     /** D.Portugal: needed in case you "rosrun" from another folder **/     
     chdir(PS_path.c_str());
-                
+
+    std::string pathToHere= __FILE__;
+
+    size_t pos = pathToHere.find("/patrolling_sim/src/PatrolAgent.cpp");
+
+    if (pos != std::string::npos) {
+        pathToHere.erase(pos, std::string("/patrolling_sim/src/PatrolAgent.cpp").length());
+    }
+
     mapname = string(argv[2]);
-    graph_file = "maps/"+mapname+"/"+mapname+".graph";
+    std::string graph_file = pathToHere + "/patrol/world/"+mapname+"/"+mapname+".graph";
+
+    //graph_file = "maps/"+mapname+"/"+mapname+".graph";
+    
     //Check Graph Dimension:
     dimension = GetGraphDimension(graph_file.c_str());
     
@@ -122,42 +133,23 @@ void PatrolAgent::init(int argc, char** argv) {
     /* Define Starting Vertex/Position (Launch File Parameters) */
 
     ros::init(argc, argv, "patrol_agent");  // will be replaced by __name:=XXXXXX
-    ros::NodeHandle nh;
-
+    ros::NodeHandle nh("~");
+    
     // wait a random time (avoid conflicts with other robots starting at the same time...)
     double r = 3.0 * ((rand() % 1000)/1000.0);
     ros::Duration wait(r); // seconds
     wait.sleep();
+
+    system("cd /home/david/; rosparam dump > params.txt");
     
     double initial_x, initial_y;
-    /* std::vector<double> list;
+    /*std::vector<double> list;
     nh.getParam("initial_pos", list);
- */
-
-    std::string initial_pos_str;
-    nh.getParam("initial_pos", initial_pos_str);
-
-    // Parse the string to extract individual elements
-    std::vector<double> list;
-    std::istringstream iss(initial_pos_str);
-    char ignore;
-    double value_manual;
-
-    // Assuming the format is [x, y, z]
-    if (iss >> ignore >> value_manual)
-    {
-        list.push_back(value_manual);
-
-        while (iss >> ignore >> value_manual >> ignore)
-        {
-            list.push_back(value_manual);
-        }
-    }
-
+    //ros::param::get("/initial_pos", list);
     
     if (list.empty()){
-     ROS_ERROR("No initial positions given: check \"initial_pos\" parameter.");
-     ros::shutdown();
+         ROS_ERROR("No initial positions given: check \"initial_pos\" parameter.");
+         ros::shutdown();
      exit(-1);
     }
        
@@ -165,7 +157,13 @@ void PatrolAgent::init(int argc, char** argv) {
     if (value == -1){value = 0;}
     
     initial_x = list[2*value];
-    initial_y = list[2*value+1];
+    initial_y = list[2*value+1];*/
+
+    nh.getParam("initial_pos_x", initial_x);
+    nh.getParam("initial_pos_y", initial_y);
+
+    ROS_INFO("Robot: %d, pos x: %.3f", ID_ROBOT, initial_x);
+    ROS_INFO("Robot: %d, pos y: %.3f", ID_ROBOT, initial_y);
     
     //   printf("initial position: x = %f, y = %f\n", initial_x, initial_y);
     current_vertex = IdentifyVertex(vertex_web, dimension, initial_x, initial_y);
