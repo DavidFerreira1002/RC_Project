@@ -1,0 +1,33 @@
+<?xml version="1.0"?>  
+<launch>    
+
+    <!-- lança o nodo map_server, para utilizar o mapa guardado -->
+    <node pkg="map_server" type="map_server" name="map_server" args="$(find patrol)/world/CurrentWorld/CurrentWorld.yaml"/>
+
+    <!-- lança o ficheiro que ativa o amcl, definindo a posição inicial estimada do robô-->
+    <include file="$(find patrol)/launch/amcl.launch">
+        <arg name="initial_pose_x" default="0.0"/>
+        <arg name="initial_pose_y" default="0.0"/>
+        <arg name="initial_pose_a" default="0.0"/>
+    </include>
+    
+    <!-- lança o move_base e os costmaps para a navegação -->
+    <include file="$(find patrol)/launch/move_base_navigation.launch"/>
+
+    <!-- lança o algoritmo AStar, para escolha dos pontos em rviz e cálculo do custo dos caminhos possíveis -->
+    <node pkg="astar" type="astar" name="astar" output="screen">
+        <param name="Euclidean" value="true"/>
+        <param name="OccupyThresh" value="-1"/>
+        <param name="InflateRadius" value="0.25"/>
+        <param name="rate" value="10"/>
+    </node>
+
+    <!-- lança o rviz -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find astar)/rviz/slam_turtle_navigation.rviz"/>
+    <!-- <node type="rviz" name="rviz" pkg="rviz" args="-d $(find rc_gmapping)/rviz/slam_turtle.rviz" /> -->
+
+    <!-- leitura do ficheiro do mapa, para a construção do grafo -->
+    <rosparam command="load" file="$(find patrol)/world/CurrentWorld/CurrentWorld.yaml"/>
+    
+    
+</launch>

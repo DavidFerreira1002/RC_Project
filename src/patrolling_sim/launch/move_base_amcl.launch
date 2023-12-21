@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <launch>
-  <arg name="robotname" default="robot_0" />
   <arg name="initial_pos_x" default="0.0"/>
   <arg name="initial_pos_y" default="0.0"/>
   <arg name="initial_pos_yaw" default="0.0"/>
 
-  <group ns="$(arg robotname)">    
 
     <!-- lançamento do AMCL para localização do robô -->
     <include file="$(find patrol)/launch/amcl.launch">
       <arg name="initial_pose_x" value="$(arg initial_pos_x)"/>
       <arg name="initial_pose_y" value="$(arg initial_pos_y)"/>
       <arg name="initial_pose_a" value="$(arg initial_pos_yaw)"/>
-      <arg name="prefix" value="$(arg robotname)" />
     </include>
 
     <!-- lançamento do move_base para movimentação do robô -->
@@ -20,27 +17,24 @@
        <remap from="map" to="/map" />
        <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
 
-       <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+       <!-- <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/costmap_common_params.yaml" command="load" ns="global_costmap"/>
        <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/costmap_common_params.yaml" command="load" ns="local_costmap" />
        <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/local_costmap_params.yaml" command="load" />
        <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/global_costmap_params.yaml" command="load" />
-       <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/move_base_params.yaml" command="load" />
-       <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/dwa_local_planner_params.yaml" command="load" />
+       <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/move_base_params.yaml" command="load" /> -->
+      
+      <rosparam file="$(find patrol)/param/dwa_local_planner_params.yaml" command="load" />
        
 
-       <param name="DWAPlannerROS/yaw_goal_tolerance" value="3.14" /> <!-- ignore yaw information in goal pose -->
+      <rosparam file="$(find patrol)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find patrol)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find patrol)/param/local_costmap_params.yaml" command="load" />
+      <rosparam file="$(find patrol)/param/global_costmap_params.yaml" command="load" />
+      <rosparam file="$(find patrol)/param/move_base_params.yaml" command="load" />
+      
+      <param name="DWAPlannerROS/yaw_goal_tolerance" value="3.14" /> <!-- ignore yaw information in goal pose -->
 
-       <!-- Override MOVE_BASE Frame Params to include prefix -->
-       <param name="global_costmap/global_frame" value="map"/>
-       <param name="global_costmap/robot_base_frame" value="$(arg robotname)/base_link"/>   
-       <param name="global_costmap/laser_scan_sensor/sensor_frame" value="$(arg robotname)/base_scan"/>
-       <param name="global_costmap/laser_scan_sensor/topic" value="/$(arg robotname)/scan"/>
-       <param name="local_costmap/global_frame" value="$(arg robotname)/odom"/>
-       <param name="local_costmap/robot_base_frame" value="$(arg robotname)/base_link"/> 
-       <param name="local_costmap/scan/sensor_frame" value="$(arg robotname)/base_scan"/>
-       <param name="local_costmap/scan/topic" value="/$(arg robotname)/scan"/>
     </node>
 
-  </group>
 </launch>
 

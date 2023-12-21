@@ -184,17 +184,17 @@ void PatrolAgent::init(int argc, char** argv) {
     }
         
     //Publicar dados de "odom" para nó de posições
-    positions_pub = nh.advertise<nav_msgs::Odometry>("positions", 1); //only concerned about the most recent
+    positions_pub = nh.advertise<nav_msgs::Odometry>("/positions", 1); //only concerned about the most recent
         
     //Subscrever posições de outros robots
-    positions_sub = nh.subscribe<nav_msgs::Odometry>("positions", 10, boost::bind(&PatrolAgent::positionsCB, this, _1));  
+    positions_sub = nh.subscribe<nav_msgs::Odometry>("/positions", 10, boost::bind(&PatrolAgent::positionsCB, this, _1));  
     
     char string1[40];
     char string2[40];
     
     if(ID_ROBOT==-1){ 
-        strcpy (string1,"odom"); //string = "odom"
-        strcpy (string2,"cmd_vel"); //string = "cmd_vel"
+        strcpy (string1,"/odom"); //string = "odom"
+        strcpy (string2,"/cmd_vel"); //string = "cmd_vel"
         TEAMSIZE = 1;
     }else{ 
         sprintf(string1,"robot_%d/odom",ID_ROBOT);
@@ -214,9 +214,9 @@ void PatrolAgent::init(int argc, char** argv) {
     ros::spinOnce(); 
     
     //Publicar dados para "results"
-    results_pub = nh.advertise<std_msgs::Int16MultiArray>("results", 100);
+    results_pub = nh.advertise<std_msgs::Int16MultiArray>("/results", 100);
     // results_sub = nh.subscribe("results", 10, resultsCB); //Subscrever "results" vindo dos robots
-    results_sub = nh.subscribe<std_msgs::Int16MultiArray>("results", 100, boost::bind(&PatrolAgent::resultsCB, this, _1) ); //Subscrever "results" vindo dos robots
+    results_sub = nh.subscribe<std_msgs::Int16MultiArray>("/results", 100, boost::bind(&PatrolAgent::resultsCB, this, _1) ); //Subscrever "results" vindo dos robots
 
     // last time comm delay has been applied
     last_communication_delay_time = ros::Time::now().toSec();   
@@ -245,6 +245,8 @@ void PatrolAgent::ready() {
     
     initialize_node(); //announce that agent is alive
     
+    ROS_INFO("Node was initialized");
+
     ros::Rate loop_rate(1); //1 sec
     
     /* Wait until all nodes are ready.. */
@@ -435,7 +437,7 @@ void PatrolAgent::update_idleness() {
 void PatrolAgent::initialize_node (){ //ID,msg_type,1
     
     int value = ID_ROBOT;
-    if (value==-1){value=0;}
+    //if (value==-1){value=0;}
     ROS_INFO("Initialize Node: Robot %d",value); 
     
     std_msgs::Int16MultiArray msg;   
@@ -450,6 +452,7 @@ void PatrolAgent::initialize_node (){ //ID,msg_type,1
     ros::Rate loop_rate(0.5); //meio segundo
     
     while (count<3){ //send activation msg 3times
+        ROS_INFO("Trying to send a msg.");
         results_pub.publish(msg);
         //ROS_INFO("publiquei msg: %s\n", msg.data.c_str());
         ros::spinOnce();
@@ -806,7 +809,7 @@ void PatrolAgent::do_send_message(std_msgs::Int16MultiArray &msg) {
 	        delay.sleep();
 	        //last_communication_delay_time = current_time;
         //}
-    }    
+    }
     results_pub.publish(msg);
     ros::spinOnce();
 }
@@ -847,11 +850,13 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr& msg) {
 
     int id_sender = vresults[0];
     int msg_type = vresults[1];
+    int smth = vresults[2];
     
-    //printf(" MESSAGE FROM %d TYPE %d ...\n",id_sender, msg_type);
+    ROS_INFO(" MESSAGE FROM %d TYPE %d SMTH %d...\n",id_sender, msg_type, smth);
     
     // messages coming from the monitor
     if (id_sender==-1 && msg_type==INITIALIZE_MSG_TYPE) {
+        ROS_INFO("Step 1: in the loop");
         if (initialize==true && vresults[2]==100) {   //"-1,msg_type,100,seq_flag" (BEGINNING)
             ROS_INFO("Let's Patrol!\n");
             double r = 1.0 * ((rand() % 1000)/1000.0);
