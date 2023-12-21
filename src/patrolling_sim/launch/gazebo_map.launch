@@ -4,7 +4,6 @@
   <arg name="model" default="waffle" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="world_name" default="CurrentWorld"/>
 
-  <arg name="ns1" default="robot1"/>
   <arg name="x1_pos" default="0.0"/>
   <arg name="y1_pos" default="0.0"/>
   <arg name="z1_pos" default="0.0"/>
@@ -31,18 +30,14 @@
   	laser_visual:=$(arg visible_laser)" />
   
 
-  <group ns="$(arg ns1)">
-    <!-- os referenciais têm um prefixo -->
-    <param name="tf_prefix" value="$(arg ns1)" />
-  	
     <!-- lançamento das transformadas do robô -->
     <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
       <param name="publish_frequency" type="double" value="50.0" />
     </node>
   	
     <!-- lançamento do simulador Gazebo -->
-    <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model $(arg ns1) -x $(arg x1_pos) -y $(arg y1_pos) -z $(arg z1_pos) -Y $(arg yaw1_angle) -param /robot_description" />
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_$(arg model) -x $(arg x1_pos) -y $(arg y1_pos) -z $(arg z1_pos) -Y $(arg yaw1_angle) -param /robot_description" />
     	<remap from="base_scan" to="scan"/>
-  </group>
-  
+
+
 </launch>

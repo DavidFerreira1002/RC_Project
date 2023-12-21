@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- argumento que define se a exploração é manual ou automática -->
+    <arg name="automatic_exploration" default="false"/>
+
+    <!-- argumento que definem o nome do mapa e posições -->
+    <arg name="world_name" default="CurrentWorld"/>
+    <arg name="x_pos" default="0.0"/>
+    <arg name="y_pos" default="0.0"/>
+    <arg name="z_pos" default="0.0"/>
+    
+
+    <!-- lançamento do algoritmo SLAM GMapping -->
+    <include file="$(find rc_gmapping)/launch/gmapping.launch">
+        <arg name="world_name" value="$(arg world_name)"/>
+    </include>
+
+    <!-- lançamento do move_base, para trajetórias e costmaps, se a exploracao automatica estiver ligada-->
+    <include file="$(find patrol)/launch/move_base_exploration.launch" if="$(arg automatic_exploration)"/>
+    
+    <!-- lancamento do teleop_key se a exploracao automatica estiver desativada-->
+    <!-- <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard" output="screen" unless="$(arg automatic_exploration)"/> -->
+</launch>

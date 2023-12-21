@@ -6,24 +6,22 @@
   <arg name="nrobots" value="1"/>
 
   <!-- launch patrol behaviors -->
-  <group ns="robot_0">
-    <arg name="robotindex" value="0"/> 
+    <arg name="robotindex" value="-1"/> 
     <arg name="robotname" value="robot_$(arg robotindex)"/>
     
     <node pkg="patrolling_sim" type="$(arg algorithm)" name="$(arg algorithm)" output="screen" args="$(arg robotname) $(arg prior_map) $(arg robotindex) $(arg nrobots)" respawn="false" >
   		<param name="initial_pos_x" value="0.0"/>
   		<param name="initial_pos_y" value="0.0"/>
 
-      <remap from="$(arg algorithm)/$(arg robotname)/cmd_vel" to="/$(arg robotname)/cmd_vel"/>
-      <remap from="$(arg algorithm)/$(arg robotname)/odom" to="/$(arg robotname)/odom"/>
-      <remap from="$(arg robotname)/move_base/cancel" to="/$(arg robotname)/move_base/cancel"/>
-      <remap from="$(arg robotname)/move_base/goal" to="/$(arg robotname)/move_base/goal"/>
-      <remap from="$(arg robotname)/move_base/feedback" to="/$(arg robotname)/move_base/feedback"/>
-      <remap from="$(arg robotname)/move_base/result" to="/$(arg robotname)/move_base/result"/>
-      <remap from="$(arg robotname)/move_base/status" to="/$(arg robotname)/move_base/status"/>
+      <!-- <remap from="$(arg algorithm)/$(arg robotname)/cmd_vel" to="/cmd_vel"/>
+      <remap from="$(arg algorithm)/$(arg robotname)/odom" to="/odom"/>
+      <remap from="$(arg robotname)/move_base/cancel" to="/move_base/cancel"/>
+      <remap from="$(arg robotname)/move_base/goal" to="/move_base/goal"/>
+      <remap from="$(arg robotname)/move_base/feedback" to="/move_base/feedback"/>
+      <remap from="$(arg robotname)/move_base/result" to="/move_base/result"/>
+      <remap from="$(arg robotname)/move_base/status" to="/move_base/status"/>
       <remap from="$(arg algorithm)/positions" to="/positions"/>
-      <remap from="$(arg algorithm)/results" to="/results"/>
+      <remap from="$(arg algorithm)/results" to="/results"/> -->
   	</node>
-  </group>
 
 </launch>
