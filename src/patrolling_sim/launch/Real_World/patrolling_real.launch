@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- argumentos -->
-  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <!-- argumentos que definem o nome do mapa, o algoritmo de patrulha a usar e o número de robôs -->
   <arg name="prior_map" default="CurrentWorld"/>
-  <arg name="algorithm" default="Cyclic"/>
+  <arg name="algorithm" default="Heuristic_Conscientious_Reactive"/>
   <arg name="nrobots" value="1"/>
 
   <!-- posição inicial -->
@@ -38,7 +37,7 @@
   </include>
 
   <!-- lançamento do visualizador rviz -->
-  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find patrolling_sim)/rviz_configs/gazebo_project.rviz"/>
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find patrol)/rviz/patrol_rviz.rviz"/>
 
   <!-- lançamento do algoritmo de patrulha -->
   <include file="$(find patrolling_sim)/launch/algorithm_patrol.launch">

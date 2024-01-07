@@ -195,3 +195,9 @@ results/CurrentWorld_1/Cyclic/miguel-virtual-machine/20240106_210929
 results/CurrentWorld_1/Cyclic/miguel-virtual-machine/20240106_213626
 results/CurrentWorld_1/Cyclic/miguel-virtual-machine/20240106_214016
 results/CurrentWorld_1/Cyclic/miguel-virtual-machine/20240106_234702
+results/CurrentWorld_1/Cyclic/miguel-virtual-machine/20240107_160538
+results/CurrentWorld_1/Cyclic/miguel-virtual-machine/20240107_161718
+results/CurrentWorld_1/Cyclic/miguel-virtual-machine/20240107_161836
+results/CurrentWorld_1/Cyclic/miguel-virtual-machine/20240107_162425
+results/CurrentWorld_1/HCR/miguel-virtual-machine/20240107_163944
+results/CurrentWorld_1/Heuristic_Conscientious_Reactive/miguel-virtual-machine/20240107_164235

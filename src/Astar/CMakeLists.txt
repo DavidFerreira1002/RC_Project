@@ -7,6 +7,7 @@ project(astar)
 
 ########### 添加系统库
 find_package(OpenCV REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 find_package(catkin REQUIRED COMPONENTS
         roscpp
@@ -26,4 +27,4 @@ include_directories(
 
 ########### 编译可执行文件
 add_executable(${PROJECT_NAME} src/main.cpp src/Astar.cpp src/OccMapTransform.cpp)
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${OpenCV_LIBS} yaml-cpp)

@@ -57,6 +57,7 @@ void operator >> (const YAML::Node& node, T& i)
 }
 #endif
 
+
 class MapServer
 {
   public:

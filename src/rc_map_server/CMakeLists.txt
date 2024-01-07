@@ -75,6 +75,7 @@ add_executable(rc_map_server-map_saver src/map_saver.cpp)
 add_dependencies(rc_map_server-map_saver ${map_server_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 set_target_properties(rc_map_server-map_saver PROPERTIES OUTPUT_NAME map_saver)
 target_link_libraries(rc_map_server-map_saver
+    ${YAMLCPP_LIBRARIES}
     ${catkin_LIBRARIES}
 )
 

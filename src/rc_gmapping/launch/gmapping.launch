@@ -45,10 +45,12 @@
 
 
   <!-- lança o visualizador rviz na configuração desejada-->
-  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find rc_gmapping)/rviz/slam_turtle.rviz" />
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find patrol)/rviz/patrol_rviz.rviz"/>
 
   <!-- lança o nodo map_saver, que guardará o mapa na diretoria do args -->
-  <node pkg="rc_map_server" name="map_saver" type="map_saver" args="-f $(find patrol)/world/$(arg world_name)/$(arg world_name)" output="screen"/>
+  <node pkg="rc_map_server" name="map_saver" type="map_saver" args="-f $(find patrol)/world/$(arg world_name)/$(arg world_name)" output="screen">
+    <param name="worldName" value="$(arg world_name)"/>
+  </node>
 
 </launch>
 
