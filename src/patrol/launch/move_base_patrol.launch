@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- argumentos para remapeamentos -->
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="odom_topic" default="/odom" />
+
+  <!-- argumento que define se se está em modo de simulação ou não -->
+  <arg name="simulation_mode" default="true"/>
+
+  <!-- argumento que define se se está em modo de exploração ou não -->
+  <arg name="explore_mode" default="false"/>
+
+
+  <!--////////////////////////////////////////////////////////////-->
+
+  <!-- lançamento do move_base para movimentação do robô -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    
+
+    <!-- definição para se utilizar o planeador especificado -->
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+
+    <!-- definição dos parâmetros necessários ao move_base -->
+    <rosparam if="$(eval simulation_mode)" file="$(find patrol)/param/costmap_common_params_sim.yaml" command="load" ns="global_costmap" />
+    <rosparam if="$(eval simulation_mode)" file="$(find patrol)/param/costmap_common_params_sim.yaml" command="load" ns="local_costmap" />
+    <rosparam unless="$(eval simulation_mode)" file="$(find patrol)/param/costmap_common_params_real.yaml" command="load" ns="global_costmap" />
+    <rosparam unless="$(eval simulation_mode)" file="$(find patrol)/param/costmap_common_params_real.yaml" command="load" ns="local_costmap" />
+
+    <rosparam if="$(eval simulation_mode)" file="$(find patrol)/param/dwa_local_planner_params_sim.yaml" command="load" />
+    <rosparam unless="$(eval simulation_mode)" file="$(find patrol)/param/dwa_local_planner_params_real.yaml" command="load"  />
+
+    <rosparam file="$(find patrol)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find patrol)/param/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find patrol)/param/move_base_params.yaml" command="load" />
+
+    <!-- remapeamentos -->
+    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+  </node>
+
+  <!-- lançamento do ficheiro que vai inicializar a exploração autónoma do robô -->
+  <include if="$(arg explore_mode)" file="$(find explore_slam)/launch/explore.launch"/>
+
+</launch>

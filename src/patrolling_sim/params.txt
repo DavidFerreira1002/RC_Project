@@ -1,18 +1,6 @@
 Cyclic:
   initial_pos_x: 0.0
   initial_pos_y: 0.0
-ROSARIA:
-  DriftFactor: -99999
-  RevCount: 0
-  TicksMM: 0
-  base_link_frame: base_link
-  lat_accel: 0.0
-  lat_decel: 0.0
-  odom_frame: odom
-  rot_accel: 0.0
-  rot_decel: 0.0
-  trans_accel: 0.0
-  trans_decel: 0.0
 amcl:
   base_frame_id: /base_link
   beam_skip_distance: 0.5
@@ -23,12 +11,12 @@ amcl:
   force_update_after_set_map: false
   global_frame_id: /map
   gui_publish_rate: 50.0
-  initial_cov_aa: 0.061292671368902964
-  initial_cov_xx: 0.1941263929663596
-  initial_cov_yy: 0.19679376114152083
-  initial_pose_a: -0.005333707139461726
-  initial_pose_x: 0.007392178635212897
-  initial_pose_y: -0.011445842487364629
+  initial_cov_aa: 0.06420762427446886
+  initial_cov_xx: 0.23159973247754942
+  initial_cov_yy: 0.179305597285948
+  initial_pose_a: -0.0012952711736082822
+  initial_pose_x: 0.029937825802665227
+  initial_pose_y: 0.014131157069988645
   kld_err: 0.02
   kld_z: 0.99
   laser_lambda_short: 0.1
@@ -61,54 +49,73 @@ amcl:
   update_min_a: 0.2
   update_min_d: 0.2
   use_map_topic: false
-astra:
-  astra_nodelet_manager:
-    num_worker_threads: 4
-  depth_rectify_depth:
-    interpolation: 0
-  depth_registered_rectify_depth:
-    interpolation: 0
-  driver:
-    auto_exposure: true
-    auto_white_balance: true
-    bootorder: 0
-    color_depth_synchronization: false
-    depth_camera_info_url: ''
-    depth_frame_id: astra_depth_optical_frame
-    depth_registration: true
-    device_id: '#1'
-    devnums: 1
-    rgb_camera_info_url: ''
-    rgb_frame_id: astra_rgb_optical_frame
+camera:
+  imager_rate: 2.0
+  rgb:
+    image_raw:
+      compressed:
+        format: jpeg
+        jpeg_optimize: false
+        jpeg_progressive: false
+        jpeg_quality: 80
+        jpeg_restart_interval: 0
+        png_level: 9
+      compressedDepth:
+        depth_max: 10.0
+        depth_quantization: 100.0
+        format: png
+        png_level: 9
+      theora:
+        keyframe_frequency: 64
+        optimize_for: 1
+        quality: 31
+        target_bitrate: 800000
 communication_delay: 0.1
+gazebo:
+  auto_disable_bodies: false
+  cfm: 1.0e-05
+  contact_max_correcting_vel: 2000.0
+  contact_surface_layer: 0.01
+  enable_ros_network: true
+  erp: 0.2
+  gravity_x: 0.0
+  gravity_y: 0.0
+  gravity_z: -9.8
+  max_contacts: 20
+  max_update_rate: 1000.0
+  sor_pgs_iters: 150
+  sor_pgs_precon_iters: 0
+  sor_pgs_rms_error_tol: 0.0
+  sor_pgs_w: 1.4
+  time_step: 0.001
 goal_reached_wait: 0.1
 initial_positions: '[0.0, 0.0]'
 lost_message_rate: 0
 move_base:
   DWAPlannerROS:
-    acc_lim_theta: 1.5
-    acc_lim_x: 1.0
+    acc_lim_theta: 3.2
+    acc_lim_x: 2.5
     acc_lim_y: 0.0
     controller_frequency: 10.0
     forward_point_distance: 0.325
-    goal_distance_bias: 20.0
+    goal_distance_bias: 20
     latch_xy_goal_tolerance: false
     max_scaling_factor: 0.2
-    max_vel_theta: 1.2
-    max_vel_trans: 0.05
-    max_vel_x: 0.05
+    max_vel_theta: 1.82
+    max_vel_trans: 0.26
+    max_vel_x: 0.26
     max_vel_y: 0.0
-    min_vel_theta: 0.5
-    min_vel_trans: 0.02
-    min_vel_x: -0.05
+    min_vel_theta: 0.9
+    min_vel_trans: 0.13
+    min_vel_x: -0.26
     min_vel_y: 0.0
     occdist_scale: 0.02
     oscillation_reset_dist: 0.05
-    path_distance_bias: 32.0
+    path_distance_bias: 32
     publish_cost_grid_pc: true
     publish_traj_pc: true
     scaling_speed: 0.25
-    sim_time: 1.5
+    sim_time: 2.0
     stop_time_buffer: 0.2
     vth_samples: 40
     vx_samples: 20
@@ -120,32 +127,30 @@ move_base:
   controller_frequency: 10.0
   controller_patience: 15.0
   global_costmap:
-    footprint: '[]'
-    footprint_padding: 0.01
+    footprint:
+    - - -0.205
+      - -0.155
+    - - -0.205
+      - 0.155
+    - - 0.077
+      - 0.155
+    - - 0.077
+      - -0.155
     global_frame: map
-    height: 10
     inflation_layer:
       cost_scaling_factor: 3.0
-      enabled: true
-      inflate_unknown: false
-      inflation_radius: 0.15
+      inflation_radius: 0.2
     map_type: costmap
     obstacle_layer:
-      combination_method: 1
-      enabled: true
-      footprint_clearing_enabled: true
-      max_obstacle_height: 2.0
       observation_sources: scan
-      obstacle_range: 4.5
-      raytrace_range: 5.0
+      obstacle_range: 3.0
+      raytrace_range: 3.5
       scan:
         clearing: true
         data_type: LaserScan
         marking: true
-        sensor_frame: laser
+        sensor_frame: base_scan
         topic: /scan
-    origin_x: 0.0
-    origin_y: 0.0
     plugins:
     - name: static_layer
       type: costmap_2d::StaticLayer
@@ -154,27 +159,29 @@ move_base:
     - name: inflation_layer
       type: costmap_2d::InflationLayer
     publish_frequency: 10.0
-    resolution: 0.05
     robot_base_frame: base_link
-    robot_radius: 0.46
-    static_layer:
-      enabled: true
     static_map: true
     transform_tolerance: 0.5
     update_frequency: 10.0
-    width: 10
   local_costmap:
     cost_scaling_factor: 3.0
+    footprint:
+    - - -0.205
+      - -0.155
+    - - -0.205
+      - 0.155
+    - - 0.077
+      - 0.155
+    - - 0.077
+      - -0.155
     global_frame: odom
     height: 4.5
-    inflation_radius: 0.15
+    inflation_radius: 0.2
     map_type: costmap
     observation_sources: scan
-    obstacle_layer:
-      obstacle_range: 4.5
-      raytrace_range: 5.0
-    obstacle_range: 4.5
+    obstacle_range: 3.0
     publish_frequency: 10.0
+    raytrace_range: 3.5
     resolution: 0.05
     robot_base_frame: base_link
     rolling_window: true
@@ -182,7 +189,7 @@ move_base:
       clearing: true
       data_type: LaserScan
       marking: true
-      sensor_frame: laser
+      sensor_frame: base_scan
       topic: /scan
     static_map: false
     transform_tolerance: 0.5
@@ -195,233 +202,184 @@ move_base:
   shutdown_costmaps: false
 navigation_module: ros
 robot_description: "<?xml version=\"1.0\" ?>\n<!-- ===================================================================================\
-  \ -->\n<!-- |    This document was autogenerated by xacro from pioneer3dx.xacro\
-  \               | -->\n<!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED  \
-  \                               | -->\n<!-- ===================================================================================\
-  \ -->\n<!-- \nThis is the xacro description of a Pioneer 3DX, to be used in rviz\
-  \ and gazebo.\nCopyright (C) 2013 Rafael Berkvens rafael.berkvens@uantwerpen.be\n\
-  \nThis program is free software: you can redistribute it and/or modify\nit under\
-  \ the terms of the GNU General Public License as published by\nthe Free Software\
-  \ Foundation, either version 3 of the License, or\n(at your option) any later version.\n\
-  \nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY\
-  \ WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR\
-  \ A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\
-  \nYou should have received a copy of the GNU General Public License\nalong with\
-  \ this program.  If not, see <http://www.gnu.org/licenses/>.\n\nThis project is\
-  \ based on work by Tracy Davies, where it was in turn based on\nwork original in\
-  \ ucs-ros-pkg.\n -->\n<robot name=\"pioneer3dx\" xmlns:xacro=\"http://ros.org/wiki/xacro\"\
-  >\n  <!-- import all gazebo-customization elements, including gazebo colors -->\n\
-  \  <gazebo>\n    <plugin filename=\"libgazebo_ros_control.so\" name=\"gazebo_ros_control\"\
-  >\n      <robotNamespace>/p3dx</robotNamespace>\n    </plugin>\n  </gazebo>\n  <gazebo\
-  \ reference=\"base_link\">\n    <material>Gazebo/Red</material>\n  </gazebo>\n \
-  \ <gazebo reference=\"top_plate\">\n    <material>Gazebo/Black</material>\n  </gazebo>\n\
-  \  <gazebo reference=\"swivel\">\n    <material>Gazebo/Grey</material>\n  </gazebo>\n\
-  \  <gazebo reference=\"center_hubcap\">\n    <material>Gazebo/Grey</material>\n\
-  \  </gazebo>\n  <gazebo reference=\"center_wheel\">\n    <material>Gazebo/Black</material>\n\
-  \    <mu1>10.0</mu1>\n    <mu2>10.0</mu2>\n    <kp>1000000.0</kp>\n    <kd>1.0</kd>\n\
-  \  </gazebo>\n  <gazebo reference=\"front_sonar\">\n    <material value=\"Gazebo/Yellow\"\
-  />\n  </gazebo>\n  <gazebo>\n    <plugin filename=\"libgazebo_ros_diff_drive.so\"\
-  \ name=\"differential_drive_controller\">\n      <alwaysOn>true</alwaysOn>\n   \
-  \   <updateRate>100</updateRate>\n      <leftJoint>base_right_wheel_joint</leftJoint>\n\
-  \      <rightJoint>base_left_wheel_joint</rightJoint>\n      <wheelSeparation>0.39</wheelSeparation>\n\
-  \      <wheelDiameter>0.15</wheelDiameter>\n      <torque>5</torque>\n      <commandTopic>cmd_vel</commandTopic>\n\
+  \ -->\n<!-- |    This document was autogenerated by xacro from /opt/ros/noetic/share/turtlebot3_description/urdf/turtlebot3_waffle.urdf.xacro\
+  \ | -->\n<!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                \
+  \                 | -->\n<!-- ===================================================================================\
+  \ -->\n<robot name=\"turtlebot3_waffle\">\n  <!-- Init colour -->\n  <material name=\"\
+  black\">\n    <color rgba=\"0.0 0.0 0.0 1.0\"/>\n  </material>\n  <material name=\"\
+  dark\">\n    <color rgba=\"0.3 0.3 0.3 1.0\"/>\n  </material>\n  <material name=\"\
+  light_black\">\n    <color rgba=\"0.4 0.4 0.4 1.0\"/>\n  </material>\n  <material\
+  \ name=\"blue\">\n    <color rgba=\"0.0 0.0 0.8 1.0\"/>\n  </material>\n  <material\
+  \ name=\"green\">\n    <color rgba=\"0.0 0.8 0.0 1.0\"/>\n  </material>\n  <material\
+  \ name=\"grey\">\n    <color rgba=\"0.5 0.5 0.5 1.0\"/>\n  </material>\n  <material\
+  \ name=\"orange\">\n    <color rgba=\"1.0 0.4235294117647059 0.0392156862745098\
+  \ 1.0\"/>\n  </material>\n  <material name=\"brown\">\n    <color rgba=\"0.8705882352941177\
+  \ 0.8117647058823529 0.7647058823529411 1.0\"/>\n  </material>\n  <material name=\"\
+  red\">\n    <color rgba=\"0.8 0.0 0.0 1.0\"/>\n  </material>\n  <material name=\"\
+  white\">\n    <color rgba=\"1.0 1.0 1.0 1.0\"/>\n  </material>\n  <gazebo reference=\"\
+  base_link\">\n    <material>Gazebo/DarkGrey</material>\n  </gazebo>\n  <gazebo reference=\"\
+  wheel_left_link\">\n    <mu1>0.1</mu1>\n    <mu2>0.1</mu2>\n    <kp>500000.0</kp>\n\
+  \    <kd>10.0</kd>\n    <minDepth>0.001</minDepth>\n    <maxVel>0.1</maxVel>\n \
+  \   <fdir1>1 0 0</fdir1>\n    <material>Gazebo/FlatBlack</material>\n  </gazebo>\n\
+  \  <gazebo reference=\"wheel_right_link\">\n    <mu1>0.1</mu1>\n    <mu2>0.1</mu2>\n\
+  \    <kp>500000.0</kp>\n    <kd>10.0</kd>\n    <minDepth>0.001</minDepth>\n    <maxVel>0.1</maxVel>\n\
+  \    <fdir1>1 0 0</fdir1>\n    <material>Gazebo/FlatBlack</material>\n  </gazebo>\n\
+  \  <gazebo reference=\"caster_back_right_link\">\n    <mu1>0.1</mu1>\n    <mu2>0.1</mu2>\n\
+  \    <kp>1000000.0</kp>\n    <kd>100.0</kd>\n    <minDepth>0.001</minDepth>\n  \
+  \  <maxVel>1.0</maxVel>\n    <material>Gazebo/FlatBlack</material>\n  </gazebo>\n\
+  \  <gazebo reference=\"caster_back_left_link\">\n    <mu1>0.1</mu1>\n    <mu2>0.1</mu2>\n\
+  \    <kp>1000000.0</kp>\n    <kd>100.0</kd>\n    <minDepth>0.001</minDepth>\n  \
+  \  <maxVel>1.0</maxVel>\n    <material>Gazebo/FlatBlack</material>\n  </gazebo>\n\
+  \  <gazebo reference=\"imu_link\">\n    <sensor name=\"imu\" type=\"imu\">\n   \
+  \   <always_on>true</always_on>\n      <visualize>false</visualize>\n    </sensor>\n\
+  \    <material>Gazebo/Grey</material>\n  </gazebo>\n  <gazebo>\n    <plugin filename=\"\
+  libgazebo_ros_diff_drive.so\" name=\"turtlebot3_waffle_controller\">\n      <commandTopic>cmd_vel</commandTopic>\n\
   \      <odometryTopic>odom</odometryTopic>\n      <odometryFrame>odom</odometryFrame>\n\
-  \      <robotBaseFrame>base_link</robotBaseFrame>\n    </plugin>\n  </gazebo>\n\
-  \  <gazebo>\n    <plugin filename=\"libgazebo_ros_p3d.so\" name=\"p3d_base_controller\"\
-  >\n      <alwaysOn>true</alwaysOn>\n      <updateRate>100.0</updateRate>\n     \
-  \ <bodyName>base_link</bodyName>\n      <topicName>p3dx/base_pose_ground_truth</topicName>\n\
-  \      <gaussianNoise>0.01</gaussianNoise>\n      <frameName>map</frameName>\n \
-  \     <!-- initialize odometry for fake localization -->\n      <xyzOffsets>0 0\
-  \ 0</xyzOffsets>\n      <rpyOffsets>0 0 0</rpyOffsets>\n    </plugin>\n  </gazebo>\n\
-  \  <gazebo reference=\"lms100\">\n    <sensor name=\"head_hokuyo_sensor\" type=\"\
-  ray\">\n      <pose>0 0 0 0 0 0</pose>\n      <visualize>false</visualize>\n   \
-  \   <update_rate>50</update_rate>\n      <ray>\n        <scan>\n          <horizontal>\n\
-  \            <samples>360</samples>\n            <resolution>1</resolution>\n  \
-  \          <min_angle>-1.570796</min_angle>\n            <max_angle>1.570796</max_angle>\n\
-  \          </horizontal>\n        </scan>\n        <range>\n          <min>0.10</min>\n\
-  \          <max>30.0</max>\n          <resolution>0.01</resolution>\n        </range>\n\
-  \        <noise>\n          <type>gaussian</type>\n          <!-- Noise parameters\
-  \ based on published spec for Hokuyo laser achieving \n\t\t\t\t\t\t\"+-30mm\" accuracy\
-  \ at range < 10m. A mean of 0.0m and stddev of 0.01m will \n\t\t\t\t\t\tput 99.7%\
-  \ of samples within 0.03m of the true reading. -->\n          <mean>0.0</mean>\n\
-  \          <stddev>0.01</stddev>\n        </noise>\n      </ray>\n      <plugin\
-  \ filename=\"libgazebo_ros_laser.so\" name=\"gazebo_ros_head_hokuyo_controller\"\
-  >\n        <topicName>p3dx/laser/scan</topicName>\n        <frameName>lms100</frameName>\n\
-  \      </plugin>\n    </sensor>\n  </gazebo>\n  <!-- import the pioneer 3dx's wheels\
-  \ -->\n  <!-- chassis -->\n  <link name=\"base_link\">\n    <inertial>\n      <mass\
-  \ value=\"3.5\"/>\n      <!--<origin xyz=\"-0.025 0 -0.223\"/> -->\n      <origin\
-  \ xyz=\"-0.05 0 0\"/>\n      <inertia ixx=\"1\" ixy=\"0\" ixz=\"0\" iyy=\"1\" iyz=\"\
-  0\" izz=\"1\"/>\n    </inertial>\n    <visual name=\"base_visual\">\n      <origin\
-  \ rpy=\"0 0 0\" xyz=\"-0.045 0 0.148\"/>\n      <geometry name=\"pioneer_geom\"\
-  >\n        <mesh filename=\"package://p3dx_description/meshes/chassis.stl\"/>\n\
-  \      </geometry>\n      <material name=\"ChassisRed\">\n        <color rgba=\"\
-  0.851 0.0 0.0 1.0\"/>\n      </material>\n    </visual>\n    <collision>\n     \
-  \ <origin rpy=\"0 0 0\" xyz=\"-0.045 0 0.145\"/>\n      <geometry>\n        <box\
-  \ size=\"0.35 0.25 0.14\"/>\n      </geometry>\n    </collision>\n  </link>\n  <!--\
-  \ top_plate -->\n  <link name=\"top_plate\">\n    <inertial>\n      <mass value=\"\
-  0.01\"/>\n      <origin xyz=\"0 0 0\"/>\n      <inertia ixx=\"1\" ixy=\"0\" ixz=\"\
-  0\" iyy=\"1\" iyz=\"0\" izz=\"1\"/>\n    </inertial>\n    <visual name=\"base_visual\"\
-  >\n      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry name=\"top_geom\"\
-  >\n        <mesh filename=\"package://p3dx_description/meshes/top.stl\"/>\n    \
-  \  </geometry>\n      <material name=\"TopBlack\">\n        <color rgba=\"0.038\
-  \ 0.038 0.038 1.0\"/>\n      </material>\n    </visual>\n    <collision>\n     \
-  \ <origin rpy=\"0 0 0\" xyz=\"0.0 0 0\"/>\n      <geometry name=\"pioneer_geom\"\
-  >\n        <box size=\"0.45 0.38 0.01\"/>\n      </geometry>\n    </collision>\n\
-  \  </link>\n  <joint name=\"base_top_joint\" type=\"fixed\">\n    <origin rpy=\"\
-  0 0 0\" xyz=\"-0.045 0 0.234\"/>\n    <parent link=\"base_link\"/>\n    <child link=\"\
-  top_plate\"/>\n  </joint>\n  <!-- swivel -->\n  <link name=\"swivel\">\n    <inertial>\n\
-  \      <mass value=\"0.1\"/>\n      <origin xyz=\"0 0 0\"/>\n      <inertia ixx=\"\
-  0.01\" ixy=\"0\" ixz=\"0\" iyy=\"0.01\" iyz=\"0\" izz=\"0.01\"/>\n    </inertial>\n\
-  \    <visual name=\"base_visual\">\n      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n\
-  \      <geometry name=\"pioneer_geom\">\n        <mesh filename=\"package://p3dx_description/meshes/swivel.stl\"\
-  />\n      </geometry>\n      <material name=\"swivel\">\n        <color rgba=\"\
-  0.5 0.5 0.5 1\"/>\n      </material>\n    </visual>\n    <collision>\n      <origin\
-  \ rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry>\n        <box size=\"0 0 0\"/>\n\
-  \      </geometry>\n    </collision>\n  </link>\n  <joint name=\"base_swivel_joint\"\
-  \ type=\"continuous\">\n    <origin rpy=\"0 0 0\" xyz=\"-0.185 0 0.055\"/>\n   \
-  \ <axis xyz=\"0 0 1\"/>\n    <anchor xyz=\"0 0 0\"/>\n    <limit effort=\"100\"\
-  \ k_velocity=\"0\" velocity=\"100\"/>\n    <joint_properties damping=\"0.0\" friction=\"\
-  0.0\"/>\n    <parent link=\"base_link\"/>\n    <child link=\"swivel\"/>\n  </joint>\n\
-  \  <!-- center_hubcap -->\n  <link name=\"center_hubcap\">\n    <inertial>\n   \
-  \   <mass value=\"0.01\"/>\n      <origin xyz=\"0 0 0\"/>\n      <inertia ixx=\"\
-  0.012411765597\" ixy=\"-0.000711733678\" ixz=\"0.00050272983\" iyy=\"0.015218160428\"\
-  \ iyz=\"-0.000004273467\" izz=\"0.011763977943\"/>\n    </inertial>\n    <visual\
-  \ name=\"base_visual\">\n      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry\
-  \ name=\"pioneer_geom\">\n        <mesh filename=\"package://p3dx_description/meshes/center_hubcap.stl\"\
-  />\n      </geometry>\n      <material name=\"swivel\">\n        <color rgba=\"\
-  0.5 0.5 0.5 1\"/>\n      </material>\n    </visual>\n    <collision>\n      <origin\
-  \ rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry>\n        <box size=\"0 0 0\"/>\n\
-  \      </geometry>\n    </collision>\n  </link>\n  <joint name=\"swivel_hubcap_joint\"\
-  \ type=\"continuous\">\n    <origin rpy=\"0 0 0\" xyz=\"-0.026 0 -0.016\"/>\n  \
-  \  <axis xyz=\"0 1 0\"/>\n    <anchor xyz=\"0 0 0\"/>\n    <limit effort=\"100\"\
-  \ k_velocity=\"0\" velocity=\"100\"/>\n    <joint_properties damping=\"0.0\" friction=\"\
-  0.0\"/>\n    <parent link=\"swivel\"/>\n    <child link=\"center_wheel\"/>\n  </joint>\n\
-  \  <!-- center_wheel -->\n  <link name=\"center_wheel\">\n    <inertial>\n     \
-  \ <mass value=\"0.1\"/>\n      <origin xyz=\"0 0 0\"/>\n      <inertia ixx=\"0.012411765597\"\
-  \ ixy=\"-0.000711733678\" ixz=\"0.00050272983\" iyy=\"0.015218160428\" iyz=\"-0.000004273467\"\
-  \ izz=\"0.011763977943\"/>\n    </inertial>\n    <visual name=\"base_visual\">\n\
-  \      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry name=\"pioneer_geom\"\
-  >\n        <mesh filename=\"package://p3dx_description/meshes/center_wheel.stl\"\
-  />\n      </geometry>\n      <material name=\"WheelBlack\">\n        <color rgba=\"\
-  0.117 0.117 0.117 1\"/>\n      </material>\n    </visual>\n    <collision>\n   \
-  \   <origin rpy=\"-1.57079635 0 0\" xyz=\"0 0 0\"/>\n      <geometry>\n        <cylinder\
-  \ length=\"0.01\" radius=\"0.0375\"/>\n      </geometry>\n    </collision>\n  </link>\n\
-  \  <joint name=\"center_wheel_joint\" type=\"fixed\">\n    <origin rpy=\"0 0 0\"\
-  \ xyz=\"-0.0035 0 -0.001\"/>\n    <parent link=\"center_wheel\"/>\n    <child link=\"\
-  center_hubcap\"/>\n  </joint>\n  <link name=\"p3dx_left_wheel\">\n    <inertial>\n\
-  \      <mass value=\"0.5\"/>\n      <origin xyz=\"0 0 0\"/>\n      <inertia ixx=\"\
-  0.012411765597\" ixy=\"0\" ixz=\"0\" iyy=\"0.015218160428\" iyz=\"0\" izz=\"0.011763977943\"\
-  />\n    </inertial>\n    <visual name=\"base_visual\">\n      <origin rpy=\"0 0\
-  \ 0\" xyz=\"0 0 0\"/>\n      <geometry name=\"pioneer_geom\">\n        <mesh filename=\"\
-  package://p3dx_description/meshes/left_wheel.stl\"/>\n      </geometry>\n      <material\
-  \ name=\"WheelBlack\">\n        <color rgba=\"0.117 0.117 0.117 1\"/>\n      </material>\n\
-  \    </visual>\n    <collision>\n      <origin rpy=\"-1.57079635 0 0\" xyz=\"0 0\
-  \ 0\"/>\n      <geometry>\n        <!--<mesh filename=\"package://p3dx_description/meshes/${suffix}_wheel.stl\"\
-  /> -->\n        <cylinder length=\"0.01\" radius=\"0.09\"/>\n      </geometry>\n\
-  \    </collision>\n  </link>\n  <joint name=\"base_left_hubcap_joint\" type=\"fixed\"\
-  >\n    <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n    <parent link=\"p3dx_left_wheel\"\
-  />\n    <child link=\"p3dx_left_hubcap\"/>\n  </joint>\n  <link name=\"p3dx_left_hubcap\"\
-  >\n    <inertial>\n      <mass value=\"0.01\"/>\n      <origin xyz=\"0 0 0\"/>\n\
-  \      <inertia ixx=\"0.012411765597\" ixy=\"0\" ixz=\"0\" iyy=\"0.015218160428\"\
-  \ iyz=\"0\" izz=\"0.011763977943\"/>\n    </inertial>\n    <visual name=\"base_visual\"\
-  >\n      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry name=\"pioneer_geom\"\
-  >\n        <mesh filename=\"package://p3dx_description/meshes/left_hubcap.stl\"\
-  />\n      </geometry>\n      <material name=\"HubcapYellow\">\n        <color rgba=\"\
-  1.0 0.811 0.151 1.0\"/>\n      </material>\n    </visual>\n    <collision>\n   \
-  \   <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry>\n        <box size=\"\
-  0 0 0\"/>\n      </geometry>\n    </collision>\n  </link>\n  <joint name=\"base_left_wheel_joint\"\
-  \ type=\"continuous\">\n    <axis xyz=\"0 1 0\"/>\n    <anchor xyz=\"0 0 0\"/>\n\
-  \    <limit effort=\"100\" velocity=\"100\"/>\n    <joint_properties damping=\"\
-  0.0\" friction=\"0.0\"/>\n    <origin rpy=\"0 0 0\" xyz=\"0 0.158 0.091\"/>\n  \
-  \  <parent link=\"base_link\"/>\n    <child link=\"p3dx_left_wheel\"/>\n  </joint>\n\
-  \  <transmission name=\"base_link_left_wheel_trans\">\n    <type>pr2_mechanism_model/SimpleTransmission</type>\n\
-  \    <joint name=\"base_left_wheel_joint\"/>\n    <actuator name=\"base_left_wheel_motor\"\
-  >\n      <hardwareInterface>EffortJointInterface</hardwareInterface>\n      <mechanicalReduction>75.0676691729</mechanicalReduction>\n\
-  \    </actuator>\n  </transmission>\n  <gazebo reference=\"p3dx_left_hubcap\">\n\
-  \    <material>Gazebo/Yellow</material>\n  </gazebo>\n  <gazebo reference=\"p3dx_left_wheel\"\
-  >\n    <material>Gazebo/Black</material>\n    <mu1>0.5</mu1>\n    <mu2>50.0</mu2>\n\
-  \    <kp>100000000.0</kp>\n    <kd>1.0</kd>\n  </gazebo>\n  <link name=\"p3dx_right_wheel\"\
-  >\n    <inertial>\n      <mass value=\"0.5\"/>\n      <origin xyz=\"0 0 0\"/>\n\
-  \      <inertia ixx=\"0.012411765597\" ixy=\"0\" ixz=\"0\" iyy=\"0.015218160428\"\
-  \ iyz=\"0\" izz=\"0.011763977943\"/>\n    </inertial>\n    <visual name=\"base_visual\"\
-  >\n      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry name=\"pioneer_geom\"\
-  >\n        <mesh filename=\"package://p3dx_description/meshes/right_wheel.stl\"\
-  />\n      </geometry>\n      <material name=\"WheelBlack\">\n        <color rgba=\"\
-  0.117 0.117 0.117 1\"/>\n      </material>\n    </visual>\n    <collision>\n   \
-  \   <origin rpy=\"-1.57079635 0 0\" xyz=\"0 0 0\"/>\n      <geometry>\n        <!--<mesh\
-  \ filename=\"package://p3dx_description/meshes/${suffix}_wheel.stl\"/> -->\n   \
-  \     <cylinder length=\"0.01\" radius=\"0.09\"/>\n      </geometry>\n    </collision>\n\
-  \  </link>\n  <joint name=\"base_right_hubcap_joint\" type=\"fixed\">\n    <origin\
-  \ rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n    <parent link=\"p3dx_right_wheel\"/>\n    <child\
-  \ link=\"p3dx_right_hubcap\"/>\n  </joint>\n  <link name=\"p3dx_right_hubcap\">\n\
-  \    <inertial>\n      <mass value=\"0.01\"/>\n      <origin xyz=\"0 0 0\"/>\n \
-  \     <inertia ixx=\"0.012411765597\" ixy=\"0\" ixz=\"0\" iyy=\"0.015218160428\"\
-  \ iyz=\"0\" izz=\"0.011763977943\"/>\n    </inertial>\n    <visual name=\"base_visual\"\
-  >\n      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry name=\"pioneer_geom\"\
-  >\n        <mesh filename=\"package://p3dx_description/meshes/right_hubcap.stl\"\
-  />\n      </geometry>\n      <material name=\"HubcapYellow\">\n        <color rgba=\"\
-  1.0 0.811 0.151 1.0\"/>\n      </material>\n    </visual>\n    <collision>\n   \
-  \   <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry>\n        <box size=\"\
-  0 0 0\"/>\n      </geometry>\n    </collision>\n  </link>\n  <joint name=\"base_right_wheel_joint\"\
-  \ type=\"continuous\">\n    <axis xyz=\"0 1 0\"/>\n    <anchor xyz=\"0 0 0\"/>\n\
-  \    <limit effort=\"100\" velocity=\"100\"/>\n    <joint_properties damping=\"\
-  0.0\" friction=\"0.0\"/>\n    <origin rpy=\"0 0 0\" xyz=\"0 -0.158 0.091\"/>\n \
-  \   <parent link=\"base_link\"/>\n    <child link=\"p3dx_right_wheel\"/>\n  </joint>\n\
-  \  <transmission name=\"base_link_right_wheel_trans\">\n    <type>pr2_mechanism_model/SimpleTransmission</type>\n\
-  \    <joint name=\"base_right_wheel_joint\"/>\n    <actuator name=\"base_right_wheel_motor\"\
-  >\n      <hardwareInterface>EffortJointInterface</hardwareInterface>\n      <mechanicalReduction>-75.0676691729</mechanicalReduction>\n\
-  \    </actuator>\n  </transmission>\n  <gazebo reference=\"p3dx_right_hubcap\">\n\
-  \    <material>Gazebo/Yellow</material>\n  </gazebo>\n  <gazebo reference=\"p3dx_right_wheel\"\
-  >\n    <material>Gazebo/Black</material>\n    <mu1>0.5</mu1>\n    <mu2>50.0</mu2>\n\
-  \    <kp>100000000.0</kp>\n    <kd>1.0</kd>\n  </gazebo>\n  <!-- front_sonar -->\n\
-  \  <link name=\"front_sonar\">\n    <inertial>\n      <mass value=\"0.0001\"/>\n\
-  \      <origin xyz=\"0 0 0\"/>\n      <inertia ixx=\"1\" ixy=\"0\" ixz=\"0\" iyy=\"\
-  1\" iyz=\"0\" izz=\"1\"/>\n    </inertial>\n    <visual name=\"front_sonar_vis\"\
-  >\n      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry name=\"pioneer_geom\"\
-  >\n        <mesh filename=\"package://p3dx_description/meshes/front_sonar.stl\"\
-  />\n      </geometry>\n      <material name=\"SonarYellow\">\n        <color rgba=\"\
-  0.715 0.583 0.210 1.0\"/>\n      </material>\n    </visual>\n    <collision>\n \
-  \     <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry>\n        <box size=\"\
-  0 0 0\"/>\n      </geometry>\n    </collision>\n  </link>\n  <joint name=\"base_front_joint\"\
-  \ type=\"fixed\">\n    <origin rpy=\"0 0 0\" xyz=\"0.109 0 0.209\"/>\n    <parent\
-  \ link=\"base_link\"/>\n    <child link=\"front_sonar\"/>\n  </joint>\n  <!-- lms100\
-  \ laser -->\n  <link name=\"lms100\">\n    <inertial>\n      <mass value=\"1e-5\"\
-  />\n      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <inertia ixx=\"1e-6\" ixy=\"\
-  0\" ixz=\"0\" iyy=\"1e-6\" iyz=\"0\" izz=\"1e-6\"/>\n    </inertial>\n    <visual>\n\
-  \      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry>\n        <mesh filename=\"\
-  package://p3dx_description/meshes/lms100.dae\"/>\n      </geometry>\n    </visual>\n\
+  \      <odometrySource>world</odometrySource>\n      <publishOdomTF>true</publishOdomTF>\n\
+  \      <robotBaseFrame>base_footprint</robotBaseFrame>\n      <publishWheelTF>false</publishWheelTF>\n\
+  \      <publishTf>true</publishTf>\n      <publishWheelJointState>true</publishWheelJointState>\n\
+  \      <legacyMode>false</legacyMode>\n      <updateRate>30</updateRate>\n     \
+  \ <leftJoint>wheel_left_joint</leftJoint>\n      <rightJoint>wheel_right_joint</rightJoint>\n\
+  \      <wheelSeparation>0.287</wheelSeparation>\n      <wheelDiameter>0.066</wheelDiameter>\n\
+  \      <wheelAcceleration>1</wheelAcceleration>\n      <wheelTorque>10</wheelTorque>\n\
+  \      <rosDebugLevel>na</rosDebugLevel>\n    </plugin>\n  </gazebo>\n  <gazebo>\n\
+  \    <plugin filename=\"libgazebo_ros_imu.so\" name=\"imu_plugin\">\n      <alwaysOn>true</alwaysOn>\n\
+  \      <bodyName>imu_link</bodyName>\n      <frameName>imu_link</frameName>\n  \
+  \    <topicName>imu</topicName>\n      <serviceName>imu_service</serviceName>\n\
+  \      <gaussianNoise>0.0</gaussianNoise>\n      <updateRate>0</updateRate>\n  \
+  \    <imu>\n        <noise>\n          <type>gaussian</type>\n          <rate>\n\
+  \            <mean>0.0</mean>\n            <stddev>2e-4</stddev>\n            <bias_mean>0.0000075</bias_mean>\n\
+  \            <bias_stddev>0.0000008</bias_stddev>\n          </rate>\n         \
+  \ <accel>\n            <mean>0.0</mean>\n            <stddev>1.7e-2</stddev>\n \
+  \           <bias_mean>0.1</bias_mean>\n            <bias_stddev>0.001</bias_stddev>\n\
+  \          </accel>\n        </noise>\n      </imu>\n    </plugin>\n  </gazebo>\n\
+  \  <gazebo reference=\"base_scan\">\n    <material>Gazebo/FlatBlack</material>\n\
+  \    <sensor name=\"lds_lfcd_sensor\" type=\"ray\">\n      <pose>0 0 0 0 0 0</pose>\n\
+  \      <visualize>false</visualize>\n      <update_rate>5</update_rate>\n      <ray>\n\
+  \        <scan>\n          <horizontal>\n            <samples>360</samples>\n  \
+  \          <resolution>1</resolution>\n            <min_angle>0.0</min_angle>\n\
+  \            <max_angle>6.28319</max_angle>\n          </horizontal>\n        </scan>\n\
+  \        <range>\n          <min>0.120</min>\n          <max>3.5</max>\n       \
+  \   <resolution>0.015</resolution>\n        </range>\n        <noise>\n        \
+  \  <type>gaussian</type>\n          <mean>0.0</mean>\n          <stddev>0.01</stddev>\n\
+  \        </noise>\n      </ray>\n      <plugin filename=\"libgazebo_ros_laser.so\"\
+  \ name=\"gazebo_ros_lds_lfcd_controller\">\n        <topicName>scan</topicName>\n\
+  \        <frameName>base_scan</frameName>\n      </plugin>\n    </sensor>\n  </gazebo>\n\
+  \  <gazebo reference=\"camera_rgb_frame\">\n    <sensor name=\"realsense_R200\"\
+  \ type=\"depth\">\n      <always_on>true</always_on>\n      <visualize>false</visualize>\n\
+  \      <camera>\n        <horizontal_fov>1.3439</horizontal_fov>\n        <image>\n\
+  \          <width>1920</width>\n          <height>1080</height>\n          <format>R8G8B8</format>\n\
+  \        </image>\n        <depth_camera/>\n        <clip>\n          <near>0.03</near>\n\
+  \          <far>100</far>\n        </clip>\n      </camera>\n      <plugin filename=\"\
+  libgazebo_ros_openni_kinect.so\" name=\"camera_controller\">\n        <baseline>0.2</baseline>\n\
+  \        <alwaysOn>true</alwaysOn>\n        <updateRate>30.0</updateRate>\n    \
+  \    <cameraName>camera</cameraName>\n        <frameName>camera_rgb_optical_frame</frameName>\n\
+  \        <imageTopicName>rgb/image_raw</imageTopicName>\n        <depthImageTopicName>depth/image_raw</depthImageTopicName>\n\
+  \        <pointCloudTopicName>depth/points</pointCloudTopicName>\n        <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>\n\
+  \        <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>\n\
+  \        <pointCloudCutoff>0.4</pointCloudCutoff>\n        <hackBaseline>0.07</hackBaseline>\n\
+  \        <distortionK1>0.0</distortionK1>\n        <distortionK2>0.0</distortionK2>\n\
+  \        <distortionK3>0.0</distortionK3>\n        <distortionT1>0.0</distortionT1>\n\
+  \        <distortionT2>0.0</distortionT2>\n        <CxPrime>0.0</CxPrime>\n    \
+  \    <Cx>0.0</Cx>\n        <Cy>0.0</Cy>\n        <focalLength>0</focalLength>\n\
+  \        <hackBaseline>0</hackBaseline>\n      </plugin>\n    </sensor>\n  </gazebo>\n\
+  \  <link name=\"base_footprint\"/>\n  <joint name=\"base_joint\" type=\"fixed\"\
+  >\n    <parent link=\"base_footprint\"/>\n    <child link=\"base_link\"/>\n    <origin\
+  \ rpy=\"0 0 0\" xyz=\"0 0 0.010\"/>\n  </joint>\n  <link name=\"base_link\">\n \
+  \   <visual>\n      <origin rpy=\"0 0 0\" xyz=\"-0.064 0 0.0\"/>\n      <geometry>\n\
+  \        <mesh filename=\"package://turtlebot3_description/meshes/bases/waffle_base.stl\"\
+  \ scale=\"0.001 0.001 0.001\"/>\n      </geometry>\n      <material name=\"light_black\"\
+  />\n    </visual>\n    <collision>\n      <origin rpy=\"0 0 0\" xyz=\"-0.064 0 0.047\"\
+  />\n      <geometry>\n        <box size=\"0.266 0.266 0.094\"/>\n      </geometry>\n\
+  \    </collision>\n    <inertial>\n      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n\
+  \      <mass value=\"1.3729096e+00\"/>\n      <inertia ixx=\"8.7002718e-03\" ixy=\"\
+  -4.7576583e-05\" ixz=\"1.1160499e-04\" iyy=\"8.6195418e-03\" iyz=\"-3.5422299e-06\"\
+  \ izz=\"1.4612727e-02\"/>\n    </inertial>\n  </link>\n  <joint name=\"wheel_left_joint\"\
+  \ type=\"continuous\">\n    <parent link=\"base_link\"/>\n    <child link=\"wheel_left_link\"\
+  />\n    <origin rpy=\"-1.57 0 0\" xyz=\"0.0 0.144 0.023\"/>\n    <axis xyz=\"0 0\
+  \ 1\"/>\n  </joint>\n  <link name=\"wheel_left_link\">\n    <visual>\n      <origin\
+  \ rpy=\"1.57 0 0\" xyz=\"0 0 0\"/>\n      <geometry>\n        <mesh filename=\"\
+  package://turtlebot3_description/meshes/wheels/left_tire.stl\" scale=\"0.001 0.001\
+  \ 0.001\"/>\n      </geometry>\n      <material name=\"dark\"/>\n    </visual>\n\
   \    <collision>\n      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n      <geometry>\n\
-  \        <box size=\"0.1 0.1 0.1\"/>\n      </geometry>\n    </collision>\n  </link>\n\
-  \  <joint name=\"lms100_joint\" type=\"fixed\">\n    <axis xyz=\"0 1 0\"/>\n   \
-  \ <origin rpy=\"0 0 0\" xyz=\"0.16 0 0.15\"/>\n    <parent link=\"base_link\"/>\n\
-  \    <child link=\"lms100\"/>\n  </joint>\n</robot>\n"
+  \        <cylinder length=\"0.018\" radius=\"0.033\"/>\n      </geometry>\n    </collision>\n\
+  \    <inertial>\n      <origin xyz=\"0 0 0\"/>\n      <mass value=\"2.8498940e-02\"\
+  />\n      <inertia ixx=\"1.1175580e-05\" ixy=\"-4.2369783e-11\" ixz=\"-5.9381719e-09\"\
+  \ iyy=\"1.1192413e-05\" iyz=\"-1.4400107e-11\" izz=\"2.0712558e-05\"/>\n    </inertial>\n\
+  \  </link>\n  <joint name=\"wheel_right_joint\" type=\"continuous\">\n    <parent\
+  \ link=\"base_link\"/>\n    <child link=\"wheel_right_link\"/>\n    <origin rpy=\"\
+  -1.57 0 0\" xyz=\"0.0 -0.144 0.023\"/>\n    <axis xyz=\"0 0 1\"/>\n  </joint>\n\
+  \  <link name=\"wheel_right_link\">\n    <visual>\n      <origin rpy=\"1.57 0 0\"\
+  \ xyz=\"0 0 0\"/>\n      <geometry>\n        <mesh filename=\"package://turtlebot3_description/meshes/wheels/right_tire.stl\"\
+  \ scale=\"0.001 0.001 0.001\"/>\n      </geometry>\n      <material name=\"dark\"\
+  />\n    </visual>\n    <collision>\n      <origin rpy=\"0 0 0\" xyz=\"0 0 0\"/>\n\
+  \      <geometry>\n        <cylinder length=\"0.018\" radius=\"0.033\"/>\n     \
+  \ </geometry>\n    </collision>\n    <inertial>\n      <origin xyz=\"0 0 0\"/>\n\
+  \      <mass value=\"2.8498940e-02\"/>\n      <inertia ixx=\"1.1175580e-05\" ixy=\"\
+  -4.2369783e-11\" ixz=\"-5.9381719e-09\" iyy=\"1.1192413e-05\" iyz=\"-1.4400107e-11\"\
+  \ izz=\"2.0712558e-05\"/>\n    </inertial>\n  </link>\n  <joint name=\"caster_back_right_joint\"\
+  \ type=\"fixed\">\n    <parent link=\"base_link\"/>\n    <child link=\"caster_back_right_link\"\
+  />\n    <origin rpy=\"-1.57 0 0\" xyz=\"-0.177 -0.064 -0.004\"/>\n  </joint>\n \
+  \ <link name=\"caster_back_right_link\">\n    <collision>\n      <origin rpy=\"\
+  0 0 0\" xyz=\"0 0.001 0\"/>\n      <geometry>\n        <box size=\"0.030 0.009 0.020\"\
+  />\n      </geometry>\n    </collision>\n    <inertial>\n      <origin xyz=\"0 0\
+  \ 0\"/>\n      <mass value=\"0.005\"/>\n      <inertia ixx=\"0.001\" ixy=\"0.0\"\
+  \ ixz=\"0.0\" iyy=\"0.001\" iyz=\"0.0\" izz=\"0.001\"/>\n    </inertial>\n  </link>\n\
+  \  <joint name=\"caster_back_left_joint\" type=\"fixed\">\n    <parent link=\"base_link\"\
+  />\n    <child link=\"caster_back_left_link\"/>\n    <origin rpy=\"-1.57 0 0\" xyz=\"\
+  -0.177 0.064 -0.004\"/>\n  </joint>\n  <link name=\"caster_back_left_link\">\n \
+  \   <collision>\n      <origin rpy=\"0 0 0\" xyz=\"0 0.001 0\"/>\n      <geometry>\n\
+  \        <box size=\"0.030 0.009 0.020\"/>\n      </geometry>\n    </collision>\n\
+  \    <inertial>\n      <origin xyz=\"0 0 0\"/>\n      <mass value=\"0.005\"/>\n\
+  \      <inertia ixx=\"0.001\" ixy=\"0.0\" ixz=\"0.0\" iyy=\"0.001\" iyz=\"0.0\"\
+  \ izz=\"0.001\"/>\n    </inertial>\n  </link>\n  <joint name=\"imu_joint\" type=\"\
+  fixed\">\n    <parent link=\"base_link\"/>\n    <child link=\"imu_link\"/>\n   \
+  \ <origin rpy=\"0 0 0\" xyz=\"0.0 0 0.068\"/>\n  </joint>\n  <link name=\"imu_link\"\
+  />\n  <joint name=\"scan_joint\" type=\"fixed\">\n    <parent link=\"base_link\"\
+  />\n    <child link=\"base_scan\"/>\n    <origin rpy=\"0 0 0\" xyz=\"-0.064 0 0.122\"\
+  />\n  </joint>\n  <link name=\"base_scan\">\n    <visual>\n      <origin rpy=\"\
+  0 0 0\" xyz=\"0 0 0\"/>\n      <geometry>\n        <mesh filename=\"package://turtlebot3_description/meshes/sensors/lds.stl\"\
+  \ scale=\"0.001 0.001 0.001\"/>\n      </geometry>\n      <material name=\"dark\"\
+  />\n    </visual>\n    <collision>\n      <origin rpy=\"0 0 0\" xyz=\"0.015 0 -0.0065\"\
+  />\n      <geometry>\n        <cylinder length=\"0.0315\" radius=\"0.055\"/>\n \
+  \     </geometry>\n    </collision>\n    <inertial>\n      <mass value=\"0.114\"\
+  />\n      <origin xyz=\"0 0 0\"/>\n      <inertia ixx=\"0.001\" ixy=\"0.0\" ixz=\"\
+  0.0\" iyy=\"0.001\" iyz=\"0.0\" izz=\"0.001\"/>\n    </inertial>\n  </link>\n  <joint\
+  \ name=\"camera_joint\" type=\"fixed\">\n    <origin rpy=\"0 0 0\" xyz=\"0.064 -0.065\
+  \ 0.094\"/>\n    <parent link=\"base_link\"/>\n    <child link=\"camera_link\"/>\n\
+  \  </joint>\n  <link name=\"camera_link\">\n    <visual>\n      <origin rpy=\"1.57\
+  \ 0 1.57\" xyz=\"0 0 0\"/>\n      <geometry>\n        <mesh filename=\"package://turtlebot3_description/meshes/sensors/r200.dae\"\
+  />\n      </geometry>\n    </visual>\n    <collision>\n      <origin rpy=\"0 0 0\"\
+  \ xyz=\"0.003 0.065 0.007\"/>\n      <geometry>\n        <box size=\"0.012 0.132\
+  \ 0.020\"/>\n      </geometry>\n    </collision>\n    <!-- This inertial field needs\
+  \ doesn't contain reliable data!! -->\n    <!--   <inertial>\n      <mass value=\"\
+  0.564\" />\n      <origin xyz=\"0 0 0\" />\n      <inertia ixx=\"0.003881243\" ixy=\"\
+  0.0\" ixz=\"0.0\"\n               iyy=\"0.000498940\" iyz=\"0.0\"\n            \
+  \   izz=\"0.003879257\" />\n    </inertial>-->\n  </link>\n  <joint name=\"camera_rgb_joint\"\
+  \ type=\"fixed\">\n    <origin rpy=\"0 0 0\" xyz=\"0.005 0.018 0.013\"/>\n    <parent\
+  \ link=\"camera_link\"/>\n    <child link=\"camera_rgb_frame\"/>\n  </joint>\n \
+  \ <link name=\"camera_rgb_frame\"/>\n  <joint name=\"camera_rgb_optical_joint\"\
+  \ type=\"fixed\">\n    <origin rpy=\"-1.57 0 -1.57\" xyz=\"0 0 0\"/>\n    <parent\
+  \ link=\"camera_rgb_frame\"/>\n    <child link=\"camera_rgb_optical_frame\"/>\n\
+  \  </joint>\n  <link name=\"camera_rgb_optical_frame\"/>\n  <joint name=\"camera_depth_joint\"\
+  \ type=\"fixed\">\n    <origin rpy=\"0 0 0\" xyz=\"0.005 0.027999999999999997 0.013\"\
+  />\n    <parent link=\"camera_link\"/>\n    <child link=\"camera_depth_frame\"/>\n\
+  \  </joint>\n  <link name=\"camera_depth_frame\"/>\n  <joint name=\"camera_depth_optical_joint\"\
+  \ type=\"fixed\">\n    <origin rpy=\"-1.57 0 -1.57\" xyz=\"0 0 0\"/>\n    <parent\
+  \ link=\"camera_depth_frame\"/>\n    <child link=\"camera_depth_optical_frame\"\
+  />\n  </joint>\n  <link name=\"camera_depth_optical_frame\"/>\n</robot>\n\n"
+robot_state_publisher:
+  publish_frequency: 50.0
 rosdistro: 'noetic
 
   '
 roslaunch:
   uris:
-    host_miguel_virtual_machine__44101: http://miguel-virtual-machine:44101/
-    host_miguel_virtual_machine__46363: http://miguel-virtual-machine:46363/
+    host_miguel_virtual_machine__33075: http://miguel-virtual-machine:33075/
 rosversion: '1.16.0
 
   '
-run_id: 6fd49584-9f5d-11ee-946b-f1db3dce45f8
+run_id: e3203ad2-aced-11ee-9b19-ff6170ebd129
 simulation_abort: 'false'
 simulation_running: 'true'
-tf_prefix: ''
-urg_node:
-  angle_max: 1.5707963267948966
-  angle_min: -1.5707963267948966
-  calibrate_time: true
-  cluster: 1
-  frame_id: laser
-  ip_address: ''
-  publish_intensity: false
-  publish_multiecho: false
-  serial_baud: 115200
-  serial_port: /dev/ttyACM0
-  skip: 0
-  tf_prefix: ''
-  time_offset: 0.0
-use_gui: false
-use_sim_time: false
+use_sim_time: true

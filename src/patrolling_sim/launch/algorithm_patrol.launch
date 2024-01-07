@@ -1,17 +1,25 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- arguments -->
+  <!-- argumentos que definem o nome do mapa, o algoritmo de patrulha a usar e o número de robôs -->
   <arg name="prior_map" default="CurrentWorld"/>
   <arg name="algorithm" default="Cyclic"/>
   <arg name="nrobots" value="1"/>
 
-  <!-- launch patrol behaviors -->
-    <arg name="robotindex" value="-1"/> 
-    <arg name="robotname" value="robot_$(arg robotindex)"/>
-    
-    <node pkg="patrolling_sim" type="$(arg algorithm)" name="$(arg algorithm)" output="screen" args="$(arg robotname) $(arg prior_map) $(arg robotindex) $(arg nrobots)" respawn="false" >
-  		<param name="initial_pos_x" value="0.0"/>
-  		<param name="initial_pos_y" value="0.0"/>
+  <!-- argumentos que definem a posição do robô -->
+  <arg name="initial_pos_x" default="0.0"/>
+  <arg name="initial_pos_y" default="0.0"/>
+
+  <!-- o index a -1 é necessário para a situação de 1 único robô, de forma a acertar as tranformadas devido aos prefixos -->
+  <arg name="robotindex" value="-1"/> 
+  <arg name="robotname" value="robot_$(arg robotindex)"/>
+  
+
+  <!--////////////////////////////////////////////////////////////-->
+
+  <!-- lançamento do nodo da patrulha -->
+  <node pkg="patrolling_sim" type="$(arg algorithm)" name="$(arg algorithm)" output="screen" args="$(arg robotname) $(arg prior_map) $(arg robotindex) $(arg nrobots)" respawn="false" >
+  	<param name="initial_pos_x" value="$(arg initial_pos_x)"/>
+  	<param name="initial_pos_y" value="$(arg initial_pos_y)"/>
 
       <!-- <remap from="$(arg algorithm)/$(arg robotname)/cmd_vel" to="/cmd_vel"/>
       <remap from="$(arg algorithm)/$(arg robotname)/odom" to="/odom"/>
@@ -22,6 +30,6 @@
       <remap from="$(arg robotname)/move_base/status" to="/move_base/status"/>
       <remap from="$(arg algorithm)/positions" to="/positions"/>
       <remap from="$(arg algorithm)/results" to="/results"/> -->
-  	</node>
+  </node>
 
 </launch>
