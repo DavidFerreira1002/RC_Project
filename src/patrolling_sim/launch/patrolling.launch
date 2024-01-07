@@ -22,10 +22,10 @@
   <!--////////////////////////////////////////////////////////////-->
 
   <!-- lançamento do mapa em Gazebo -->
-  <include file="$(find patrolling_sim)/launch/gazebo_map.launch">
+  <include file="$(find patrol)/launch/museum_gazebo.launch">
     <arg name="world_name" value="$(arg prior_map)"/>
-    <arg name="x1_pos" value="$(arg initial_x)"/>
-    <arg name="y1_pos" value="$(arg initial_y)"/>
+    <arg name="x_pos" value="$(arg initial_x)"/>
+    <arg name="y_pos" value="$(arg initial_y)"/>
     <arg name="yaw1_angle" value="$(arg initial_yaw)"/>
   </include>
 
@@ -33,7 +33,7 @@
   <node pkg="patrolling_sim" type="monitor" name="monitor" args="$(arg prior_map) $(arg algorithm) $(arg nrobots)" respawn="false"/>
 
   <!-- carrega o mapa gravado anteriormente -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find patrol)/world/$(arg prior_map)/$(arg prior_map).yaml"/>
+  <node name="rc_map_server" pkg="map_server" type="map_server" args="$(find patrol)/world/$(arg prior_map)/$(arg prior_map).yaml"/>
 
   <!-- lançamento do move_base e do amcl -->
   <include file="$(find patrolling_sim)/launch/move_base_amcl.launch">

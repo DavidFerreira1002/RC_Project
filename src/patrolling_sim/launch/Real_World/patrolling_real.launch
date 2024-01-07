@@ -25,7 +25,7 @@
   <node pkg="patrolling_sim" type="monitor" name="monitor" args="$(arg prior_map) $(arg algorithm) $(arg nrobots)" respawn="false"/>
 
   <!-- carrega o mapa gravado anteriormente -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find patrol)/world/$(arg prior_map)/$(arg prior_map).yaml"/>
+  <node name="rc_map_server" pkg="map_server" type="map_server" args="$(find patrol)/world/$(arg prior_map)/$(arg prior_map).yaml"/>
 
   <!-- lançamento do move_base e do amcl -->
   <include file="$(find patrolling_sim)/launch/move_base_amcl.launch">

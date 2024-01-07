@@ -11,12 +11,12 @@ amcl:
   force_update_after_set_map: false
   global_frame_id: /map
   gui_publish_rate: 50.0
-  initial_cov_aa: 0.06396516676513149
-  initial_cov_xx: 0.2233765352151223
-  initial_cov_yy: 0.15556868897607828
-  initial_pose_a: 0.004396104761736791
-  initial_pose_x: 0.04451873295107958
-  initial_pose_y: -0.0027153453335274297
+  initial_cov_aa: 0.06733272234430529
+  initial_cov_xx: 0.22339271684100764
+  initial_cov_yy: 0.19621614507239166
+  initial_pose_a: -0.002840071066639734
+  initial_pose_x: 0.015833285551151023
+  initial_pose_y: 0.01515761550781849
   kld_err: 0.02
   kld_z: 0.99
   laser_lambda_short: 0.1
@@ -407,16 +407,17 @@ robot_description: "<?xml version=\"1.0\" ?>\n<!-- =============================
   />\n  </joint>\n  <link name=\"camera_depth_optical_frame\"/>\n</robot>\n\n"
 robot_state_publisher:
   publish_frequency: 50.0
+  tf_prefix: ''
 rosdistro: 'noetic
 
   '
 roslaunch:
   uris:
-    host_miguel_virtual_machine__35473: http://miguel-virtual-machine:35473/
+    host_miguel_virtual_machine__38691: http://miguel-virtual-machine:38691/
 rosversion: '1.16.0
 
   '
-run_id: c1fa08d6-ad7b-11ee-8ce1-3b6ea84537d0
+run_id: b8e3a926-ada5-11ee-8ce1-3b6ea84537d0
 simulation_abort: 'false'
 simulation_running: 'true'
 use_sim_time: true
