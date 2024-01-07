@@ -1,17 +1,22 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- Arguments -->
-  <!-- definição do modelo do robô e da sua posição inicial -->
+  <!-- argumentos que definem o modelo do robô e o nome do mapa -->
   <arg name="model" default="waffle" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="world_name" default="CurrentWorld"/>
+
+  <!-- argumentos que definem a posição inicial do robô -->
   <arg name="x_pos" default="0.0"/>
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.0"/>
-  <arg name="world_name" default="CurrentWorld"/>
-  <!-- <arg name="yaw_angle" default="0.0122173"/> -->
+  <arg name="yaw1_angle" default="0.0"/>
 
+
+  <!--////////////////////////////////////////////////////////////-->
+
+  <!-- carrega os modelos necessários para o mapa -->
   <env name="GAZEBO_MODEL_PATH" value="$(find patrol)/model:$(optenv GAZEBO_MODEL_PATH)" />
 
-  <!-- definição do mundo Gazebo, a partir do ficheiro CurrentWorld.world -->
+  <!-- definição do mundo Gazebo -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find patrol)/world/$(arg world_name)/$(arg world_name).world"/>
     <arg name="paused" value="false"/>
@@ -25,7 +30,7 @@
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
 
   <!-- abertura do nodo gazebo com o modelo definido -->
-  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -Y $(arg yaw1_angle) -param robot_description" />
 
   <!-- abertura do nodo que publica as transformadas entre referenciais -->
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">

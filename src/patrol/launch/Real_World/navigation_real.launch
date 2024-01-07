@@ -1,18 +1,35 @@
 <?xml version="1.0"?>  
 <launch>    
 
+    <!-- argumento que define se se está em modo de simulação ou não -->
+    <arg name="simulation_mode" default="false"/>
+
+    <!-- argumento que define se se está em modo de exploração ou não -->
+    <arg name="explore_mode" default="false"/>
+    
+    <!-- argumentos que definem as posições -->
+    <arg name="x_pos" default="0.0"/>
+    <arg name="y_pos" default="0.0"/>
+    <arg name="a_pos" default="0.0"/>
+
+
+    <!--////////////////////////////////////////////////////////////-->
+
     <!-- lança o nodo map_server, para utilizar o mapa guardado -->
     <node pkg="map_server" type="map_server" name="map_server" args="$(find patrol)/world/CurrentWorld/CurrentWorld.yaml"/>
 
     <!-- lança o ficheiro que ativa o amcl, definindo a posição inicial estimada do robô-->
     <include file="$(find patrol)/launch/amcl.launch">
-        <arg name="initial_pose_x" default="0.0"/>
-        <arg name="initial_pose_y" default="0.0"/>
-        <arg name="initial_pose_a" default="0.0"/>
+        <arg name="initial_pose_x" value="$(arg x_pos)"/>
+        <arg name="initial_pose_y" value="$(arg y_pos)"/>
+        <arg name="initial_pose_a" value="$(arg a_pos)"/>
     </include>
     
     <!-- lança o move_base e os costmaps para a navegação -->
-    <include file="$(find patrol)/launch/move_base_navigation.launch"/>
+    <include file="$(find patrol)/launch/move_base_patrol.launch">
+        <arg name="simulation_mode" value="$(arg simulation_mode)"/>
+        <arg name="explore_mode" value="$(arg explore_mode)"/>
+    </include>
 
     <!-- lança o algoritmo AStar, para escolha dos pontos em rviz e cálculo do custo dos caminhos possíveis -->
     <node pkg="astar" type="astar" name="astar" output="screen">

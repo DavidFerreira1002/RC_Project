@@ -1,20 +1,22 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- argumentos -->
+  <!-- argumentos que definem o modelo do robô e o nome do mapa -->
   <arg name="model" default="waffle" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="world_name" default="CurrentWorld"/>
 
+  <!-- argumentos que definem a posição inicial do robô -->
   <arg name="x1_pos" default="0.0"/>
   <arg name="y1_pos" default="0.0"/>
   <arg name="z1_pos" default="0.0"/>
   <arg name="yaw1_angle" default="0.0"/>
-
-  <arg name="visible_laser" default="true"/> 
   
+
+  <!--////////////////////////////////////////////////////////////-->
+
   <!-- carrega os modelos necessários para o mapa -->
   <env name="GAZEBO_MODEL_PATH" value="$(find rc_simul_worlds)/models:$(optenv GAZEBO_MODEL_PATH)" />
 
-  <!-- definição do mapa -->
+  <!-- definição do mundo gazebo -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find patrol)/world/$(arg world_name)/$(arg world_name).world"/>
     <arg name="paused" value="false"/>
@@ -26,18 +28,17 @@
 
   <!-- definição do modelo do robô -->
   <param name="robot_description" command="$(find xacro)/xacro --inorder
-  	'$(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro'
-  	laser_visual:=$(arg visible_laser)" />
-  
+  	'$(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro'"/>
 
-    <!-- lançamento das transformadas do robô -->
-    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-      <param name="publish_frequency" type="double" value="50.0" />
-    </node>
+  <!-- abertura do nodo que publica as transformadas entre referenciais -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+  </node>
   	
-    <!-- lançamento do simulador Gazebo -->
-    <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_$(arg model) -x $(arg x1_pos) -y $(arg y1_pos) -z $(arg z1_pos) -Y $(arg yaw1_angle) -param /robot_description" />
-    	<remap from="base_scan" to="scan"/>
+  <!-- abertura do nodo gazebo com o modelo definido -->
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_$(arg model) -x $(arg x1_pos) -y $(arg y1_pos) -z $(arg z1_pos) -Y $(arg yaw1_angle) -param /robot_description" />
+  
+  <remap from="base_scan" to="scan"/>
 
 
 </launch>

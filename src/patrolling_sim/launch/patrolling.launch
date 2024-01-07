@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- argumentos -->
-  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <!-- argumentos que definem o nome do mapa, o algoritmo de patrulha a usar e o número de robôs -->
   <arg name="prior_map" default="CurrentWorld"/>
   <arg name="algorithm" default="Cyclic"/>
   <arg name="nrobots" value="1"/>
@@ -9,6 +8,7 @@
   <!-- posição inicial -->
   <arg name="initial_x" value="0.0" />
   <arg name="initial_y" value="0.0" />
+  <arg name="initial_z" value="0.0" />
   <arg name="initial_yaw" value="0.0" />
 
   <!-- parâmetros globais -->
@@ -19,12 +19,15 @@
   <param name="/initial_positions" value="[$(arg initial_x), $(arg initial_y)]"/>
   <param name="/navigation_module" value="ros"/>
   
+
+  <!--////////////////////////////////////////////////////////////-->
+
   <!-- lançamento do mapa em Gazebo -->
   <include file="$(find patrolling_sim)/launch/gazebo_map.launch">
-    <arg name="world_name" default="$(arg prior_map)"/>
-
+    <arg name="world_name" value="$(arg prior_map)"/>
     <arg name="x1_pos" value="$(arg initial_x)"/>
     <arg name="y1_pos" value="$(arg initial_y)"/>
+    <arg name="z1_pos" value="$(arg initial_z)"/>
     <arg name="yaw1_angle" value="$(arg initial_yaw)"/>
   </include>
 
@@ -36,9 +39,10 @@
 
   <!-- lançamento do move_base e do amcl -->
   <include file="$(find patrolling_sim)/launch/move_base_amcl.launch">
-    <arg name="initial_pos_x" default="$(arg initial_x)"/>
-    <arg name="initial_pos_y" default="(arg initial_y)"/>
-    <arg name="initial_pos_yaw" default="(arg initial_yaw)"/>
+    <arg name="initial_pos_x" value="$(arg initial_x)"/>
+    <arg name="initial_pos_y" value="$(arg initial_y)"/>
+    <arg name="initial_pos_yaw" value="$(arg initial_yaw)"/>
+    <arg name="simulation_mode" value="true"/>
   </include>
 
   <!-- lançamento do visualizador rviz -->
@@ -48,6 +52,8 @@
   <include file="$(find patrolling_sim)/launch/algorithm_patrol.launch">
     <arg name="prior_map" value="$(arg prior_map)"/>
     <arg name="algorithm" value="$(arg algorithm)"/>
+    <arg name="initial_pos_x" value="$(arg initial_x)"/>
+    <arg name="initial_pos_y" value="$(arg initial_y)"/>
   </include>
 
 </launch>

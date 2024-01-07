@@ -19,6 +19,9 @@
   <param name="/initial_positions" value="[$(arg initial_x), $(arg initial_y)]"/>
   <param name="/navigation_module" value="ros"/>
 
+
+  <!--////////////////////////////////////////////////////////////-->
+  
   <!-- nodo de monitorização, necessário para a patrulha -->
   <node pkg="patrolling_sim" type="monitor" name="monitor" args="$(arg prior_map) $(arg algorithm) $(arg nrobots)" respawn="false"/>
 
@@ -27,9 +30,11 @@
 
   <!-- lançamento do move_base e do amcl -->
   <include file="$(find patrolling_sim)/launch/move_base_amcl.launch">
-    <arg name="initial_pos_x" default="$(arg initial_x)"/>
-    <arg name="initial_pos_y" default="(arg initial_y)"/>
-    <arg name="initial_pos_yaw" default="(arg initial_yaw)"/>
+    <arg name="initial_pos_x" value="$(arg initial_x)"/>
+    <arg name="initial_pos_y" value="$(arg initial_y)"/>
+    <arg name="initial_pos_yaw" value="$(arg initial_yaw)"/>
+    <arg name="simulation_mode" value="false"/>
+
   </include>
 
   <!-- lançamento do visualizador rviz -->
@@ -39,6 +44,8 @@
   <include file="$(find patrolling_sim)/launch/algorithm_patrol.launch">
     <arg name="prior_map" value="$(arg prior_map)"/>
     <arg name="algorithm" value="$(arg algorithm)"/>
+    <arg name="initial_pos_x" value="$(arg initial_x)"/>
+    <arg name="initial_pos_y" value="$(arg initial_y)"/>
   </include>
 
 </launch>

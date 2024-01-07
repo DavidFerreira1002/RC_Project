@@ -1,10 +1,16 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- nome do mapa-->
+  <!-- argumento que define o nome do mapa -->
   <arg name="world_name" default="CurrentWorld"/>
 
+  <!-- argumento que define se se está em modo de simulação ou não -->
+  <arg name="sim_time" default="true"/>
+
+
+  <!--////////////////////////////////////////////////////////////-->
+
   <!-- nodo GMapping-->
-    <param name="use_sim_time" value="false"/>
+    <param name="use_sim_time" value="$(arg sim_time)"/>
     <node pkg="rc_gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
       <param name="throttle_scans" value="10"/>
       <param name="map_update_interval" value="2.5"/> 
@@ -25,12 +31,12 @@
       <param name="angularUpdate" value="0.5"/>
       <param name="temporalUpdate" value="3.0"/>
       <param name="resampleThreshold" value="0.5"/>
-      <param name="particles" value="30"/> 
+      <param name="particles" value="40"/> 
       <param name="xmin" value="-1.0"/>
       <param name="ymin" value="-1.0"/>
       <param name="xmax" value="2.0"/>
       <param name="ymax" value="3.0"/>
-      <param name="delta" value="0.02"/> 
+      <param name="delta" value="0.05"/> <!-- definição da resolução do mapa a 5cm, igual ao do costmap do move_base -->
       <param name="llsamplerange" value="0.01"/>
       <param name="llsamplestep" value="0.01"/>
       <param name="lasamplerange" value="0.005"/>
