@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- argumento que define se a exploração é manual ou automática -->
+    <arg name="automatic_exploration" default="false"/>
+
+    <!-- argumento que define se se está em modo de simulação ou não -->
+    <arg name="simulation_mode" default="true"/>
+
+    <!-- argumento que define se se está em modo de exploração ou não -->
+    <arg name="explore_mode" default="true"/>
+
+    <!-- argumento que definem o nome do mapa e posições -->
+    <arg name="world_name" default="CurrentWorld"/>
+    <arg name="x_pos" default="0.0"/>
+    <arg name="y_pos" default="0.0"/>
+    <arg name="z_pos" default="0.0"/>
+    <arg name="a_pos" default="0.0"/>
+
+
+    <!--////////////////////////////////////////////////////////////-->
+    
+    <!-- lançamento do mapa em simulador Gazebo -->
+    <include file="$(find patrol)/launch/museum_gazebo.launch">
+        <arg name="world_name" value="$(arg world_name)"/>
+        <arg name="x_pos" value="$(arg x_pos)"/>
+        <arg name="y_pos" value="$(arg y_pos)"/>
+        <arg name="z_pos" value="$(arg z_pos)"/>
+        <arg name="yaw1_angle" value="$(arg a_pos)"/>
+    </include>
+
+    <!-- lançamento do algoritmo SLAM GMapping. Lança igualmente o rviz e o nodo que guardará o mapa no fim da exploração -->
+    <include file="$(find rc_gmapping)/launch/gmapping.launch">
+        <arg name="world_name" value="$(arg world_name)"/>
+        <arg name="sim_time" value="$(arg simulation_mode)"/>
+    </include>
+
+    <!-- lançamento do move_base, para trajetórias e costmaps, se a exploracao automatica estiver ligada-->
+    <include file="$(find patrol)/launch/move_base_patrol.launch" if="$(arg automatic_exploration)">
+        <arg name="simulation_mode" value="$(arg simulation_mode)"/>
+        <arg name="explore_mode" value="$(arg explore_mode)"/>
+    </include>
+    
+    <!-- lancamento do teleop_key se a exploracao automatica estiver desativada-->
+    <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard" output="screen" unless="$(arg automatic_exploration)"/>
+
+    <!-- lancamento do nodo astar, que calculará custos para a construção de um grafo entre os pontos de patrulha definidos no final da exploração -->
+    <node pkg="astar" type="astar" name="astar" output="screen">
+        <param name="Euclidean" value="true"/>
+        <param name="OccupyThresh" value="-1"/>
+        <param name="InflateRadius" value="0.25"/>
+        <param name="rate" value="10"/>
+        <param name="worldName" value="$(arg world_name)"/>
+    </node>
+
+</launch>

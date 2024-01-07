@@ -34,14 +34,14 @@ void Astar::InitAstar(Mat& _Map, Mat& Mask, AstarConfig _config)
     MapProcess(Mask);
 }
 
-void Astar::PathPlanning(Point _startPoint, Point _targetPoint, vector<Point>& path)
+void Astar::PathPlanning(Point _startPoint, Point _targetPoint, vector<Point>& path, string worldName)
 {
     // Get variables
     startPoint = _startPoint;
     targetPoint = _targetPoint;
 
     // Path Planning
-    Node* TailNode = FindPath();
+    Node* TailNode = FindPath(worldName);
     GetPath(TailNode, path);
 }
 
@@ -110,7 +110,7 @@ void Astar::MapProcess(Mat& Mask)
     }
 }
 
-Node* Astar::FindPath()
+Node* Astar::FindPath(string worldName)
 {
     int width = Map.cols;
     int height = Map.rows;
@@ -154,7 +154,7 @@ Node* Astar::FindPath()
                 pathToHere.erase(pos, std::string("/Astar/src/Astar.cpp").length());
             }
 
-            std::string filePath = pathToHere + "/patrol/world/CurrentWorld/CurrentWorld.graph";
+            std::string filePath = pathToHere + "/patrol/world/" + worldName + "/" + worldName + ".graph";
 
             std::ofstream fout;
             fout.open(filePath, ios::app);

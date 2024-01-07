@@ -15,7 +15,7 @@
     
     <!--////////////////////////////////////////////////////////////-->
     
-    <!-- lançamento do algoritmo SLAM GMapping -->
+    <!-- lançamento do algoritmo SLAM GMapping. Lança igualmente o rviz e o nodo que guardará o mapa no fim da exploração -->
     <include file="$(find rc_gmapping)/launch/gmapping.launch">
         <arg name="world_name" value="$(arg world_name)"/>
         <arg name="sim_time" value="$(arg simulation_mode)"/>

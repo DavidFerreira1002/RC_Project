@@ -8,7 +8,9 @@
 #include <opencv2/opencv.hpp>
 #include "Astar.h"
 #include "OccMapTransform.h"
+#include <std_msgs/Bool.h>
 
+#include <yaml-cpp/yaml.h>
 
 using namespace cv;
 using namespace std;
@@ -42,6 +44,10 @@ bool startpoint_flag;
 bool targetpoint_flag;
 bool start_flag;
 int rate;
+string worldName;
+
+bool mss_state = false;
+bool astar_initiated = false;
 
 
 void startingPath(){
@@ -50,7 +56,7 @@ void startingPath(){
             double start_time = ros::Time::now().toSec();
             // Start planning path
             vector<Point> PathList;
-            astar.PathPlanning(startPoint, targetPoint, PathList);
+            astar.PathPlanning(startPoint, targetPoint, PathList, worldName);
             if(!PathList.empty())
             {
                 path.header.stamp = ros::Time::now();
@@ -178,7 +184,6 @@ void ClickedPointCallback(const geometry_msgs::PointStamped& msg)
 
     clickedPointsSet.push_back(clickedPoint);
 
-
     std::string pathToHere= __FILE__;
 
     size_t pos = pathToHere.find("/Astar/src/main.cpp");
@@ -187,10 +192,15 @@ void ClickedPointCallback(const geometry_msgs::PointStamped& msg)
         pathToHere.erase(pos, std::string("/Astar/src/main.cpp").length());
     }
 
-    std::string filePath = pathToHere + "/patrol/world/CurrentWorld/CurrentWorld.graph";
+    std::string yamlPath = pathToHere + "/patrol/world/" + worldName + "/" + worldName + ".yaml";
+    //cout << yamlPath << "\n";
+
+    YAML::Node yaml_config = YAML::LoadFile(yamlPath);
+
+    std::string filePath = pathToHere + "/patrol/world/" + worldName + "/" + worldName + ".graph";
 
     std::ifstream fin;
-    fin.open(pathToHere + "/patrol/world/CurrentWorld/CurrentWorld.pgm");
+    fin.open(pathToHere + "/patrol/world/" + worldName + "/" + worldName + ".pgm");
 
     char magicNumber[2];
     fin.read(magicNumber, 2);
@@ -216,16 +226,34 @@ void ClickedPointCallback(const geometry_msgs::PointStamped& msg)
     int dimension = clickedPointsSet.size();
     float resolution;
     std::vector<float> origin;
-    
-    nh.getParam("resolution", resolution);
-    nh.getParam("origin", origin);
+
+    float yaw;
+    std::vector<float> position;
+    //nh.getParam("resolution", resolution);
+    //nh.getParam("origin", origin);
     
     //cout << resolution << "\n";
 
-    float offset_x = origin.at(0);
-    float offset_y = origin.at(1);
-    
+    //float offset_x = origin.at(0);
+    //float offset_y = origin.at(1);
 
+    
+    if (yaml_config["resolution"]) {
+        resolution = yaml_config["resolution"].as<float>();
+    }
+
+    if (yaml_config["origin"]) {
+        origin = yaml_config["origin"].as<std::vector<float>>();
+    }
+    
+    //ros::param::get("resolution", resolution);
+    //ros::param::get("origin", origin);
+    
+    //cout << resolution << "\n";
+
+    float offset_x = origin[0];
+    float offset_y = origin[1];
+    
 
     //fin.open(pathToHere + "/patrol/world/CurrentWorld.yaml");
     /*
@@ -263,7 +291,6 @@ void ClickedPointCallback(const geometry_msgs::PointStamped& msg)
     fout << resolution << "\n";
     fout << offset_x << "\n";
     fout << offset_y << "\n" << "\n";
-
 
     for (int i = 0; i < clickedPointsSet.size(); ++i)
     {
@@ -307,6 +334,17 @@ void ClickedPointCallback(const geometry_msgs::PointStamped& msg)
     //fout.close();
 }
 
+
+//callback caso o mapa já tenha sido gravado
+void mssCallback(const std_msgs::Bool& mss){
+	mss_state = mss.data;
+
+  //caso o mapa já tenha sido guardado
+  if (mss_state) {
+    ROS_INFO("The user may now select points using the Publish Point feature on rviz!");
+  }
+}
+
 //-------------------------------- Main function ---------------------------------//
 int main(int argc, char * argv[])
 {
@@ -327,21 +365,29 @@ int main(int argc, char * argv[])
     nh_priv.param<int>("OccupyThresh", config.OccupyThresh, -1);
     nh_priv.param<double>("InflateRadius", InflateRadius, -1);
     nh_priv.param<int>("rate", rate, 10);
+    nh_priv.param<string>("worldName", worldName, "CurrentWorld");
 
-    // Subscribe topics
-    map_sub = nh.subscribe("map", 10, MapCallback);
-    startPoint_sub = nh.subscribe("initialpose", 10, StartPointCallback);
-    targetPoint_sub = nh.subscribe("move_base_simple/goal", 10, TargetPointtCallback);
-    clickedPoint_sub = nh.subscribe("clicked_point", 10, ClickedPointCallback);
-
-    // Advertise topics
-    mask_pub = nh.advertise<nav_msgs::OccupancyGrid>("mask", 1);
-    path_pub = nh.advertise<nav_msgs::Path>("nav_path", 10);
+    ros::Subscriber mss_sub = nh.subscribe("/map_saved_status", 2, mssCallback);
 
     // Loop and wait for callback
     ros::Rate loop_rate(rate);
     while(ros::ok())
     {
+        //caso o mapa esteja já guardado, pode iniciar o funcionamento do nodo Astar
+        if(mss_state && !astar_initiated){
+            // Subscribe topics
+            map_sub = nh.subscribe("map", 10, MapCallback);
+            startPoint_sub = nh.subscribe("initialpose", 10, StartPointCallback);
+            targetPoint_sub = nh.subscribe("move_base_simple/goal", 10, TargetPointtCallback);
+            clickedPoint_sub = nh.subscribe("clicked_point", 10, ClickedPointCallback);
+
+            // Advertise topics
+            mask_pub = nh.advertise<nav_msgs::OccupancyGrid>("mask", 1);
+            path_pub = nh.advertise<nav_msgs::Path>("nav_path", 10);
+            
+            astar_initiated = true;
+        }
+
         loop_rate.sleep();
         ros::spinOnce();
     }

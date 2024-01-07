@@ -59,7 +59,7 @@ public:
     // Interface function
     void InitAstar(Mat& _Map, AstarConfig _config = AstarConfig());
     void InitAstar(Mat& _Map, Mat& Mask, AstarConfig _config = AstarConfig());
-    void PathPlanning(Point _startPoint, Point _targetPoint, vector<Point>& path);
+    void PathPlanning(Point _startPoint, Point _targetPoint, vector<Point>& path, string worldName);
     void DrawPath(Mat& _Map, vector<Point>& path, InputArray Mask = noArray(), Scalar color = Scalar(0, 0, 255),
             int thickness = 1, Scalar maskcolor = Scalar(255, 255, 255));
 
@@ -72,7 +72,7 @@ public:
 
 private:
     void MapProcess(Mat& Mask);
-    Node* FindPath();
+    Node* FindPath(string worldName);
     void GetPath(Node* TailNode, vector<Point>& path);
 
 private:

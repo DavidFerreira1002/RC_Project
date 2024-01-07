@@ -2,13 +2,12 @@
 <launch>
   <!-- argumentos que definem o nome do mapa, o algoritmo de patrulha a usar e o número de robôs -->
   <arg name="prior_map" default="CurrentWorld"/>
-  <arg name="algorithm" default="Cyclic"/>
+  <arg name="algorithm" default="Heuristic_Conscientious_Reactive"/>
   <arg name="nrobots" value="1"/>
 
   <!-- posição inicial -->
   <arg name="initial_x" value="0.0" />
   <arg name="initial_y" value="0.0" />
-  <arg name="initial_z" value="0.0" />
   <arg name="initial_yaw" value="0.0" />
 
   <!-- parâmetros globais -->
@@ -27,7 +26,6 @@
     <arg name="world_name" value="$(arg prior_map)"/>
     <arg name="x1_pos" value="$(arg initial_x)"/>
     <arg name="y1_pos" value="$(arg initial_y)"/>
-    <arg name="z1_pos" value="$(arg initial_z)"/>
     <arg name="yaw1_angle" value="$(arg initial_yaw)"/>
   </include>
 
@@ -46,7 +44,7 @@
   </include>
 
   <!-- lançamento do visualizador rviz -->
-  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find patrolling_sim)/rviz_configs/gazebo_project.rviz"/>
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find patrol)/rviz/patrol_rviz.rviz"/>
 
   <!-- lançamento do algoritmo de patrulha -->
   <include file="$(find patrolling_sim)/launch/algorithm_patrol.launch">

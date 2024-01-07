@@ -55,11 +55,16 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/TransformStamped.h>
 
+#include "yaml-cpp/yaml.h"
+
 using namespace std;
 
 //variável que afirma se o mapa já foi gravado
 bool map_is_saved = false;
 
+ros::Publisher ms;
+
+string worldName;
 
 /**
  * @brief Map generation node.
@@ -145,8 +150,8 @@ free_thresh: 0.196
       ROS_INFO("Done\n");
       saved_map_ = true;
       sm.data = true;
-      ros::NodeHandle n;
-      ms = n.advertise<std_msgs::Bool>("map_saved_status", 5);
+      //ros::NodeHandle n;
+      //ms = n.advertise<std_msgs::Bool>("map_saved_status", 5);
       ms.publish(sm);
     }
 
@@ -156,7 +161,7 @@ free_thresh: 0.196
     std_msgs::Bool sm;
     int threshold_occupied_;
     int threshold_free_;
-    ros::Publisher ms;
+    //ros::Publisher ms;
 
 };
 
@@ -199,7 +204,7 @@ void saveLastOdomCallback(const nav_msgs::Odometry& msg){
         pathToHere.erase(pos, std::string("/rc_map_server/src/map_saver.cpp").length());
     }
 
-    std::string filePath = pathToHere + "/patrol/world/finalExploreOdom.yaml";
+    std::string filePath = pathToHere + "/patrol/world/" + worldName + "/finalExploreOdom.yaml";
 
     // geometry_msgs::PoseStamped odom_pose;
     // odom_pose.header.frame_id = "odom";
@@ -227,16 +232,24 @@ void saveLastOdomCallback(const nav_msgs::Odometry& msg){
     tf2::Quaternion q = tf2::Quaternion(msg.pose.pose.orientation.x,msg.pose.pose.orientation.y,msg.pose.pose.orientation.z,msg.pose.pose.orientation.w);
     double yaw = q.getY();
 
+    YAML::Emitter emitter;
+
+    emitter << YAML::BeginMap;
+    emitter << YAML::Key << "position";
+    emitter << YAML::Value << YAML::Flow << YAML::BeginSeq << msg.pose.pose.orientation.x << msg.pose.pose.orientation.y << YAML::EndSeq;
+    emitter << YAML::EndMap;
 
     // open the filestream
     std::ofstream fout(filePath);
     if (fout.is_open()) {
-        fout << "position:\n";
-        fout << "  x: " << msg.pose.pose.position.x << "\n";
-        fout << "  y: " << msg.pose.pose.position.y << "\n";
+        //fout << "position: " << "[" + msg.pose.pose.position.x + ", " + msg.pose.pose.position.y + "]" << "\n";
+        //fout << "  x: " << msg.pose.pose.position.x << "\n";
+        //fout << "  y: " << msg.pose.pose.position.y << "\n";
 
-        fout << "orientation:\n";
-        fout << "  yaw: " << yaw << "\n";
+        //fout << "orientation:\n";
+        fout << emitter.c_str();
+        fout << "\n";
+        fout << "yaw: " << yaw << "\n";
         fout.close();
       ROS_INFO("Saved the final odometry.");
     
@@ -263,6 +276,13 @@ int main(int argc, char **argv)
   //subscribe to "odom" to save the last position
   ros::Subscriber last_odom = nh.subscribe("/odom",1,saveLastOdomCallback);
   
+
+  ms = nh.advertise<std_msgs::Bool>("map_saved_status", 10);
+
+  ros::NodeHandle nh_priv("~");
+
+  nh_priv.param<string>("worldName", worldName, "CurrentWorld");
+
   std::string mapname = "map";
   int threshold_occupied = 65;
   int threshold_free = 25;
@@ -351,6 +371,11 @@ int main(int argc, char **argv)
       map_is_saved = mg.saved_map_; 
     }
 
+    rate.sleep();
+    ros::spinOnce();
+  }
+
+  while(ros::ok()) {
     rate.sleep();
     ros::spinOnce();
   }
