@@ -9,7 +9,7 @@
   <arg name="initial_pos_x" default="0.0"/>
   <arg name="initial_pos_y" default="0.0"/>
 
-  <!-- o index a -1 é necessário para a situação de 1 único robô, de forma a acertar as tranformadas devido aos prefixos -->
+  <!-- o index a -1 é necessário para a situação de 1 único robô, de forma a acertar as transformadas devido aos prefixos -->
   <arg name="robotindex" value="-1"/> 
   <arg name="robotname" value="robot_$(arg robotindex)"/>
   

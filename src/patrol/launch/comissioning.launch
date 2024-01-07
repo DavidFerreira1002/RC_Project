@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
     <!-- argumento que define se a exploração é manual ou automática -->
-    <arg name="automatic_exploration" default="false"/>
+    <arg name="automatic_exploration" default="true"/>
 
     <!-- argumento que define se se está em modo de simulação ou não -->
     <arg name="simulation_mode" default="true"/>
