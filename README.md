@@ -31,6 +31,12 @@ Copia os ficheiros para dentro do src folder no workspace_name, na consola verif
 -catkin_make
 ```
 
+Espera que o computador compile o programa e corre o comando
+
+```bash
+source devel/setup.bash
+```
+
 ## Correr o código
 
 Primeiro correr:
