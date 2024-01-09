@@ -32,7 +32,7 @@ cd src
 Copie os ficheiros para dentro da pasta src no workspace_name, na consola verifique que está na pasta workspace_name, e faça o comando:
 
 ```bash
--catkin_make
+catkin_make
 ```
 
 Espere que o computador compile o programa e corra o comando
