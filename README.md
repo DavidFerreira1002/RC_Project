@@ -29,7 +29,7 @@ cd src
 
 ```
 
-Copie os ficheiros para dentro do src folder no workspace_name, na consola verifique que está no workspace_name folder, e faça o comando:
+Copie os ficheiros para dentro da pasta src no workspace_name, na consola verifique que está na pasta workspace_name, e faça o comando:
 
 ```bash
 -catkin_make
