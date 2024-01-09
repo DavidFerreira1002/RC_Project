@@ -11,12 +11,12 @@ amcl:
   force_update_after_set_map: false
   global_frame_id: /map
   gui_publish_rate: 50.0
-  initial_cov_aa: 0.06733272234430529
-  initial_cov_xx: 0.22339271684100764
-  initial_cov_yy: 0.19621614507239166
-  initial_pose_a: -0.002840071066639734
-  initial_pose_x: 0.015833285551151023
-  initial_pose_y: 0.01515761550781849
+  initial_cov_aa: 0.06686715168161317
+  initial_cov_xx: 0.23581890811660955
+  initial_cov_yy: 0.20322633126611256
+  initial_pose_a: 0.0027607267852638707
+  initial_pose_x: 0.02427163378175755
+  initial_pose_y: 0.01722088338074828
   kld_err: 0.02
   kld_z: 0.99
   laser_lambda_short: 0.1
@@ -413,11 +413,11 @@ rosdistro: 'noetic
   '
 roslaunch:
   uris:
-    host_miguel_virtual_machine__38691: http://miguel-virtual-machine:38691/
+    host_ubuntu__44367: http://ubuntu:44367/
 rosversion: '1.16.0
 
   '
-run_id: b8e3a926-ada5-11ee-8ce1-3b6ea84537d0
+run_id: aae109ce-ae8e-11ee-af81-af2a0c7df515
 simulation_abort: 'false'
 simulation_running: 'true'
 use_sim_time: true

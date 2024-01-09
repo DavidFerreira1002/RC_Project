@@ -5,7 +5,7 @@
     <arg name="laser_range_finder"	default="true"/>
     <arg name="camera"			        default="true"/>
     <arg name="camera_model"        default="Astra"/>
-<!--    <arg name="camera_model"    default="Realsense"/>-->
+   <!-- <arg name="camera_model"    default="Realsense"/> -->
 <!--    <arg name="camera_model"    default="MyntEye"/>-->
 <!--    <arg name="camera_model"    default="Realsense_d435"/>-->
 

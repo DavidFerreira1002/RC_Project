@@ -7,7 +7,7 @@
 
  <group>
   <include file="$(find realsense2_camera)/launch/rs_camera.launch" >
-    <arg name="camera" value="realsense"/>-->
+    <arg name="camera" value="realsense"/>
     <arg name="initial_reset" value="false"/>
     <arg name="align_depth" value="true"/>
     <arg name="filters" value="pointcloud,disparity,spatial,temporal,decimation"/>
