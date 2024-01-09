@@ -2,7 +2,11 @@
 
 ## Introdução
 
-Este projeto é um protótipo de um robô móvel autónomo para patrulhamento, até agora o robô é capaz de explorar o espaço, mapear e de seguida receber pontos para patrulha, conseguindo escolher para onde ir e como lá chegar.
+Este projeto é um protótipo de um robô móvel autónomo para patrulhamento. O robô tem um modo de comissionamento, em que explora o seu ambiente de trabalho 
+
+é capaz de explorar o espaço, mapear e receber pontos para efetuar a patrulha. 
+
+até agora o robô é capaz de explorar o espaço, mapear e de seguida receber pontos para patrulha, conseguindo escolher para onde ir e como lá chegar.
 
 ## Dependências
 
