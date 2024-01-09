@@ -35,7 +35,7 @@ Copie os ficheiros para dentro da pasta src no workspace_name, na consola verifi
 catkin_make
 ```
 
-Espere que o computador compile o programa e corra o comando
+Espere que o computador compile o programa e corra o comando:
 
 ```bash
 source devel/setup.bash
