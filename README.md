@@ -18,7 +18,7 @@ sudo apt install ros-noetic-turtlebot3-msgs ros-noetic-turtlebot3-bringup ros-no
 
 Para a criação do workspace siga os seguintes passos:
 
-Na pasta que quer por o projeto,
+Na pasta que quer por o projeto, abra uma consola e corra os seguintes comandos:
 
 ```bash
 
