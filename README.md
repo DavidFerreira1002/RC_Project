@@ -39,16 +39,18 @@ Espere que o computador compile o programa e, por fim, corra o comando:
 source devel/setup.bash
 ```
 
-## Correr o código
+## Executar o código
 
-O código pode ser corrido em ambinete de simulação Gazebo ou com ligação a um robô Pioneer 3 - DX.
+### Modo de comissionamento
+
+O código pode ser corrido em ambiente de simulação Gazebo ou com ligação a um robô Pioneer 3 - DX.
 No caso da simulação, deve correr: 
 
 ```bash
 roslaunch patrol comissioning.launch
 ```
 
-No caso da ligação ao robô deve correr, em terminais diferentes da consola, estes comandos:
+Já no caso da ligação ao robô deve correr, em terminais diferentes da consola, estes comandos:
 
 ```bash
 roslaunch robot robot.launch
@@ -57,6 +59,14 @@ roslaunch patrol comissioning_real.launch
 
 Quando receber uma mensagem no terminal, o utilizador pode passar à edição do mapa. Dentro do rviz, utilize a função "Publish Point" para escolher os pontos de interesse para a patrulha. Quando todos os pontos de interesse estiverem escolhidos, pode fechar o launch file. 
 
+
+Argumentos que o utilizador deve definir em 'comissioning.launch' e/ou 'comissioning_real.launch':
+*
+*
+*
+
+### Modo de operação
+
 Para inicializar o modo de operação, deve correr os códigos seguintes.
 No caso da simulação, deve correr:
 
@@ -64,12 +74,12 @@ No caso da simulação, deve correr:
 roslaunch patrolling_sim patrolling.launch
 ```
 
-No caso da ligação ao robô, deve correr, em terminais diferentes da consola, estes comandos:
+Já no caso da ligação ao robô, deve correr, em terminais diferentes da consola, estes comandos:
 
 ```bash
 roslaunch robot robot.launch (caso o robô ainda não tenha sido inicializado)
 roslaunch patrol comissioning_real.launch
 ```
 
-O robô planeia então uma rota de patrulha tendo em conta os pontos de interesse selecionados anteriormente e autonomamente desloca-se segundo o plano, tendo em conta a presença de pessoas e a adição ou remoção de objetos nos pontos de interesse.
+O robô planeia então uma rota de patrulha tendo em conta os pontos de interesse selecionados anteriormente e autonomamente desloca-se segundo o plano, tendo em conta a presença de pessoas e a adição ou remoção de objetos nos pontos de interesse da patrulha.
 
