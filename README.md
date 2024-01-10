@@ -61,9 +61,8 @@ Quando receber uma mensagem no terminal, o utilizador pode passar à edição do
 
 
 Argumentos que o utilizador deve definir em `comissioning.launch` e/ou `comissioning_real.launch`:
-* 1
-* 2
-* 3
+* automatic_exploration -> define se a exploração é manual ou automática;
+* world_name -> define o nome do mapa;
 
 ### Modo de operação
 
@@ -84,6 +83,5 @@ roslaunch patrolling_sim patrolling_real.launch
 O robô planeia então uma rota de patrulha tendo em conta os pontos de interesse selecionados anteriormente e autonomamente desloca-se segundo o plano, tendo em conta a presença de pessoas e a adição ou remoção de objetos nos pontos de interesse da patrulha.
 
 Argumentos que o utilizador deve definir em `patrolling.launch` e/ou `patrolling_real.launch`:
-* 1
-* 2
-* 3
+* prior_map -> define o nome do mapa a ser usado;
+* algorithm -> define o algoritmo de planeamento de rota a ser utilizado;
