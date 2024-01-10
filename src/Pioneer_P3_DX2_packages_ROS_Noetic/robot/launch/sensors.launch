@@ -43,9 +43,9 @@
     <arg name="robot_type"         value="$(arg robot_type)" />
   </include>
 
-  <include if="$(eval camera_model == 'Astra')" file="$(find robot)/launch/orbbec_astra_camera.launch">
+  <!-- <include if="$(eval camera_model == 'Astra')" file="$(find robot)/launch/orbbec_astra_camera.launch">
     <arg name="robot_type"         value="$(arg robot_type)" />
-  </include>
+  </include> -->
 
 
   <include if="$(eval camera_model == 'MyntEye')" file="$(find robot)/launch/mynteye_stereo_camera.launch">

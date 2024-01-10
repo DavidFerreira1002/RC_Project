@@ -4,6 +4,7 @@
 
 ros::Publisher call_depth_image_buffer;
 
+
 void detectionCallback(const vision_msgs::Detection2DArray& det_array){
 
 	ROS_INFO("got something");
@@ -58,8 +59,6 @@ void detectionCallback(const vision_msgs::Detection2DArray& det_array){
 
 		call_depth_image_buffer.publish(resultsToSend);
     }
-
-	
 
 
 }

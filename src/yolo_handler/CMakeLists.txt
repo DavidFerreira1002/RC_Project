@@ -55,6 +55,7 @@ add_message_files(
   FILES
   ProcessedImageResults.msg
   ObjectInformation.msg
+  VertexInformation.msg
 )
 
 ## Generate services in the 'srv' folder

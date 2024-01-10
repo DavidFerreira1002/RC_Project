@@ -66,6 +66,7 @@ protected:
 
     double xPos[NUM_MAX_ROBOTS]; //tabelas de posições (atençao ao index pro caso de 1 so robot)
     double yPos[NUM_MAX_ROBOTS]; //tabelas de posições (atençao ao index pro caso de 1 so robot)
+    double thetaPos[NUM_MAX_ROBOTS]; //tabelas de posições (atençao ao index pro caso de 1 so robot)
 
     tf::TransformListener *listener;
 
@@ -96,7 +97,8 @@ protected:
     ros::Subscriber results_sub;
     ros::Publisher results_pub;
     ros::Publisher cmd_vel_pub;
-
+    ros::Publisher start_rotation_time;
+    ros::Publisher end_rotation_time;
     
 public:
     
@@ -135,6 +137,7 @@ public:
     void onGoalNotComplete(); // what to do when a goal has NOT been reached (aborted)
     
     // Events
+    virtual void makeItSpin(); //when it reaches a goal, does a 360 and after moves to the next goal
     virtual void onGoalComplete(); // what to do when a goal has been reached
     virtual void processEvents();  // processes algorithm-specific events
     
