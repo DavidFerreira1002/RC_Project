@@ -9,9 +9,19 @@ No modo de operação, o robô efetua uma rota de patrulha pelos pontos previame
 ## Dependências
 
 Este projeto foi feito em ROS1 Noetic e necessita da instalação dos seguintes pacotes:
-POR ATUALIZAR
 ```bash
-sudo apt install ros-noetic-turtlebot3-msgs ros-noetic-turtlebot3-bringup ros-noetic-turtlebot3-slam ros-noetic-turtlebot3-navigation ros-noetic-joint-state-publisher-gui ros-noetic-navigation ros-noetic-gmapping ros-noetic-explore-lite
+sudo apt install ros-noetic-gmapping libuvc-dev ros-noetic-explore-lite ros-noetic-navigation libaria-dev ros-noetic-turtlebot3-description
+
+sudo apt install ros-noetic-vision-msgs python3-pip
+pip install -r requirements.txt
+pip install numpy
+pip install python-dateutil
+pip install scipy
+```
+
+Pode ser necessário correr ao seguinte comando para aceder ao robô.
+```bash
+sudo adduser user dialout
 ```
 
 ## Criação do workspace
@@ -85,3 +95,12 @@ O robô planeia então uma rota de patrulha tendo em conta os pontos de interess
 Argumentos que o utilizador deve definir em `patrolling.launch` e/ou `patrolling_real.launch`:
 * prior_map -> define o nome do mapa a ser usado;
 * algorithm -> define o algoritmo de planeamento de rota a ser utilizado;
+
+É necessário correr também alguns nodos para verificar a funcionalidade de reconhecimento de objetos e de pessoas, lançados correndo o seguinte launch file:
+
+```bash
+roslaunch yolo_handler yolo.launch 
+```
+
+Este ficheiro lança o nodo de análise de imagem através do algoritmo YOLOv7, e o algoritmo de análise dos objetos encontrados para as funcionalidades de adição e remoção de objetos, e o reconhecimento de pessoas no mapa entre locais a vigiar.
+
