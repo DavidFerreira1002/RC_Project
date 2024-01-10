@@ -356,6 +356,32 @@ void PatrolAgent::run() {
     } // while ros.ok    
 }
 
+void PatrolAgent::makeItSpin()
+{
+    ROS_INFO("BLA BLA BLA\n SPIN ME ROUND ROUND BABY ROUND ROUND BABY ROUND ROUND BABY ROUND ROUND");
+    int idx = ID_ROBOT;
+    if (ID_ROBOT<=-1){
+        idx = 0;
+    }
+
+    
+    
+    //Define Goal:
+    move_base_msgs::MoveBaseGoal goal;
+    // Calculate the new orientation for a 359-degree turn
+    double rotation_angle = 180;  // degrees
+    double target_yaw = thetaPos[idx] + (rotation_angle * M_PI / 180.0);  // Convert degrees to radians
+    geometry_msgs::Quaternion angle_quat = tf::createQuaternionMsgFromYaw(target_yaw);
+
+
+    //Send the goal to the robot (Global Map)  
+    goal.target_pose.header.frame_id = "map"; 
+    goal.target_pose.header.stamp = ros::Time::now();    
+    goal.target_pose.pose.position.x = xPos[idx]; // current x position
+    goal.target_pose.pose.position.y = yPos[idx]; // current y position 
+    goal.target_pose.pose.orientation = angle_quat; //do a 359
+    ac->sendGoal(goal, boost::bind(&PatrolAgent::goalDoneCallback, this, _1, _2), boost::bind(&PatrolAgent::goalActiveCallback,this), boost::bind(&PatrolAgent::goalFeedbackCallback, this,_1));  
+}
 
 void PatrolAgent::onGoalComplete()
 {
@@ -372,6 +398,9 @@ void PatrolAgent::onGoalComplete()
     /** SEND GOAL (REACHED) AND INTENTION **/
     send_goal_reached(); // Send TARGET to monitor
     send_results();  // Algorithm specific function
+
+    //MAKE IT SPIN (when it reaches a goal, does a 360 and after moves to the next goal)
+    makeItSpin();
 
     //Send the goal to the robot (Global Map)
     ROS_INFO("Sending goal - Vertex %d (%f,%f)\n", next_vertex, vertex_web[next_vertex].x, vertex_web[next_vertex].y);
@@ -509,7 +538,7 @@ void PatrolAgent::odomCB(const nav_msgs::Odometry::ConstPtr& msg) { //colocar pr
     
     xPos[idx]=x; // msg->pose.pose.position.x;
     yPos[idx]=y; // msg->pose.pose.position.y;
-    
+    thetaPos[idx]=th;
 //  printf("Posicao colocada em Pos[%d]\n",idx);
 }
 
@@ -614,9 +643,9 @@ void PatrolAgent::send_goal_reached() {
     msg.data.push_back(value);
     msg.data.push_back(TARGET_REACHED_MSG_TYPE);
     msg.data.push_back(current_vertex);
-    //msg.data.push_back(next_vertex);
+    msg.data.push_back(next_vertex);
     //msg.data.push_back(0); //David Portugal: is this necessary?
-    
+    ROS_INFO("FLAG!\nFLAG!\nFLAG!");
     results_pub.publish(msg);   
     ros::spinOnce();  
 }
