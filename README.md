@@ -60,10 +60,10 @@ roslaunch patrol comissioning_real.launch
 Quando receber uma mensagem no terminal, o utilizador pode passar à edição do mapa. Dentro do rviz, utilize a função "Publish Point" para escolher os pontos de interesse para a patrulha. Quando todos os pontos de interesse estiverem escolhidos, pode fechar o launch file. 
 
 
-Argumentos que o utilizador deve definir em 'comissioning.launch' e/ou 'comissioning_real.launch':
-*
-*
-*
+Argumentos que o utilizador deve definir em `comissioning.launch` e/ou `comissioning_real.launch`:
+* 1
+* 2
+* 3
 
 ### Modo de operação
 
