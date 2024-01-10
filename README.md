@@ -24,7 +24,7 @@ Na pasta em que pretende colocar o projeto, abra uma consola e corra os seguinte
 
 mkdir workspace_name
 cd workspace_name
-git clone https://github.com/DavidFerreira1002/RC_Project
+git clone https://github.com/DavidFerreira1002/RC_Project.git
 ```
 
 Após o término da transferência, e na pasta workspace_name, corra o seguinte comando:
