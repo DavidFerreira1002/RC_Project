@@ -78,8 +78,12 @@ Já no caso da ligação ao robô, deve correr, em terminais diferentes da conso
 
 ```bash
 roslaunch robot robot.launch (caso o robô ainda não tenha sido inicializado)
-roslaunch patrol comissioning_real.launch
+roslaunch patrolling_sim patrolling_real.launch
 ```
 
 O robô planeia então uma rota de patrulha tendo em conta os pontos de interesse selecionados anteriormente e autonomamente desloca-se segundo o plano, tendo em conta a presença de pessoas e a adição ou remoção de objetos nos pontos de interesse da patrulha.
 
+Argumentos que o utilizador deve definir em `patrolling.launch` e/ou `patrolling_real.launch`:
+* 1
+* 2
+* 3
