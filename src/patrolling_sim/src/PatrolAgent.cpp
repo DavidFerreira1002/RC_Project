@@ -47,6 +47,7 @@
 #include <std_srvs/Empty.h>
 
 #include "PatrolAgent.h"
+#include <patrolling_sim/VertexInformation.h>
 
 using namespace std;
 
@@ -211,6 +212,11 @@ void PatrolAgent::init(int argc, char** argv) {
     //Subscrever para obter dados de "odom" do robot corrente
     odom_sub = nh.subscribe<nav_msgs::Odometry>(string1, 1, boost::bind(&PatrolAgent::odomCB, this, _1)); //size of the buffer = 1 (?)
     
+    //start_rotation_time to sinc camera with yolo
+    start_rotation_time = nh.advertise<patrolling_sim::VertexInformation>("/start_rotation_time",1);
+    //end_rotation_time to sinc camera with yolo
+    end_rotation_time = nh.advertise<patrolling_sim::VertexInformation>("/end_rotation_time",1);
+
     ros::spinOnce(); 
     
     //Publicar dados para "results"
@@ -358,29 +364,47 @@ void PatrolAgent::run() {
 
 void PatrolAgent::makeItSpin()
 {
-    ROS_INFO("BLA BLA BLA\n SPIN ME ROUND ROUND BABY ROUND ROUND BABY ROUND ROUND BABY ROUND ROUND");
-    int idx = ID_ROBOT;
-    if (ID_ROBOT<=-1){
-        idx = 0;
+    //ROS_INFO("SPIN ME ROUND ROUND BABY ROUND ROUND BABY ROUND ROUND BABY ROUND ROUND");
+
+    //Roses are red
+    //Violets are blue
+    //I spin around
+    //and so do you
+
+    // Set the rotation speed
+    double angular_speed = 0.5;  // Adjust as needed
+    // Create a Twist message for rotation
+    geometry_msgs::Twist rotateCmd;
+    rotateCmd.angular.z = angular_speed;
+    // Set the duration for rotation
+    double rotation_duration = 6.28 / angular_speed;  // 6.28 radians for 360 degrees
+
+    // Publish the rotation command for the specified duration
+    ros::Time startTime = ros::Time::now();
+
+    patrolling_sim::VertexInformation msg_start_time;
+    msg_start_time.TimeStamp = startTime;
+    msg_start_time.currentVertex = current_vertex;
+
+    start_rotation_time.publish(msg_start_time);
+    while (ros::Time::now() - startTime < ros::Duration(rotation_duration))
+    {
+        cmd_vel_pub.publish(rotateCmd);
+        ros::spinOnce();
+        // Sleep for a short duration to control the rotation speed
+        ros::Duration(0.01).sleep();
     }
+    ros::Time endTime = ros::Time::now();
 
-    
-    
-    //Define Goal:
-    move_base_msgs::MoveBaseGoal goal;
-    // Calculate the new orientation for a 359-degree turn
-    double rotation_angle = 180;  // degrees
-    double target_yaw = thetaPos[idx] + (rotation_angle * M_PI / 180.0);  // Convert degrees to radians
-    geometry_msgs::Quaternion angle_quat = tf::createQuaternionMsgFromYaw(target_yaw);
+    patrolling_sim::VertexInformation msg_end_time;
+    msg_end_time.TimeStamp = endTime;
+    msg_end_time.currentVertex = current_vertex;
 
+    end_rotation_time.publish(msg_end_time);
+    // Send a stop command to halt rotation
+    rotateCmd.angular.z = 0.0;
+    cmd_vel_pub.publish(rotateCmd);
 
-    //Send the goal to the robot (Global Map)  
-    goal.target_pose.header.frame_id = "map"; 
-    goal.target_pose.header.stamp = ros::Time::now();    
-    goal.target_pose.pose.position.x = xPos[idx]; // current x position
-    goal.target_pose.pose.position.y = yPos[idx]; // current y position 
-    goal.target_pose.pose.orientation = angle_quat; //do a 359
-    ac->sendGoal(goal, boost::bind(&PatrolAgent::goalDoneCallback, this, _1, _2), boost::bind(&PatrolAgent::goalActiveCallback,this), boost::bind(&PatrolAgent::goalFeedbackCallback, this,_1));  
 }
 
 void PatrolAgent::onGoalComplete()
@@ -620,7 +644,7 @@ void PatrolAgent::goalDoneCallback(const actionlib::SimpleClientGoalState &state
 
 void PatrolAgent::goalActiveCallback(){  //enquanto o robot esta a andar para o goal...
     goal_complete = false;
-//      ROS_INFO("Goal is active.");
+    ROS_INFO("Goal is active.");
 }
 
 void PatrolAgent::goalFeedbackCallback(const move_base_msgs::MoveBaseFeedbackConstPtr &feedback){    //publicar posições
@@ -643,7 +667,7 @@ void PatrolAgent::send_goal_reached() {
     msg.data.push_back(value);
     msg.data.push_back(TARGET_REACHED_MSG_TYPE);
     msg.data.push_back(current_vertex);
-    msg.data.push_back(next_vertex);
+    //msg.data.push_back(next_vertex);
     //msg.data.push_back(0); //David Portugal: is this necessary?
     ROS_INFO("FLAG!\nFLAG!\nFLAG!");
     results_pub.publish(msg);   

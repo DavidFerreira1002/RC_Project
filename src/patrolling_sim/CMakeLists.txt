@@ -9,10 +9,11 @@ find_package(catkin REQUIRED COMPONENTS
   move_base_msgs
   nav_msgs
   roscpp
-#  rospy
+  rospy
   roslib
   tf
   message_generation
+  std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -49,11 +50,10 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  VertexInformation.msg
+)
 
 ## Generate services in the 'srv' folder
 add_service_files(
@@ -87,6 +87,7 @@ catkin_package(
   INCLUDE_DIRS src
    LIBRARIES PatrolAgent SSIPatrolAgent
 #  CATKIN_DEPENDS actionlib move_base_msgs nav_msgs roscpp tf
+   CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )
 

@@ -97,7 +97,8 @@ protected:
     ros::Subscriber results_sub;
     ros::Publisher results_pub;
     ros::Publisher cmd_vel_pub;
-
+    ros::Publisher start_rotation_time;
+    ros::Publisher end_rotation_time;
     
 public:
     
